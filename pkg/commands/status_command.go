@@ -28,7 +28,7 @@ func (c *statusCommand) Run(rc RunContext) error {
 
 	changelogErr := release.ChangelogComplete(rc.ReleaseCommands().Status.Verbose)
 	configErr := release.VerifyConfig(ctx.Config, rc.ReleaseCommands().Status.Verbose)
-	changedFiles := release.NewFileVersions(ctx.Config)
+	changedFiles := release.NewFileVersions(ctx.Config, rc.ReleaseCommands().Status.Verbose)
 	gitChanges := !gitutil.HasChanges(ctx.Config.SourceRoot)
 
 	fmt.Printf("Configuration:       %s\n", okNotOK(configErr == nil))

@@ -14,13 +14,12 @@ import (
 // NewFileVersions checks that the binaries/artifacts are changed since last
 // release. This ignores the common artifacts (with ID set to '-') and will
 // only check the actual binaries.
-func NewFileVersions(config Config) bool {
+func NewFileVersions(config Config, printErrors bool) bool {
 	// This holds the checksums for the new files
 	newChecksums := make(map[string]string)
 	for _, v := range config.Files {
 		if v.Target == anyTarget {
 			// ignore common files. These will be the same from release to release
-			fmt.Println("Ignoring ", v.Name)
 			continue
 		}
 
@@ -75,7 +74,9 @@ func NewFileVersions(config Config) bool {
 		}
 		newChecksum := newChecksums[tuples[1]]
 		if newChecksum == tuples[0] {
-			toolbox.PrintError("File %s has the same checksum as the previous version (%s) -- %s", tuples[1], oldVersion, tuples[0])
+			if printErrors {
+				toolbox.PrintError("File %s has the same checksum as the previous version (%s) -- %s", tuples[1], oldVersion, tuples[0])
+			}
 			sameChecksum++
 		}
 	}

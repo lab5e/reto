@@ -16,7 +16,7 @@ const (
 // to stderr.
 func InitTool() error {
 	// Make sure the release directory doesn't exist
-	err := os.Mkdir("release", toolbox.DefaultFilePerm)
+	err := os.Mkdir("release", toolbox.DefaultDirPerm)
 	if os.IsExist(err) {
 		toolbox.PrintError("The 'release' directory already exists.")
 		return err
@@ -48,7 +48,7 @@ func InitTool() error {
 
 	templateDir := "release/templates"
 
-	if err := os.Mkdir(templateDir, toolbox.DefaultFilePerm); err != nil {
+	if err := os.Mkdir(templateDir, toolbox.DefaultDirPerm); err != nil {
 		toolbox.PrintError("Could not create the template directory: %v", err)
 		return err
 	}
@@ -61,7 +61,7 @@ func InitTool() error {
 		return err
 	}
 
-	if err := os.Mkdir(archiveDir, toolbox.DefaultFilePerm); err != nil {
+	if err := os.Mkdir(archiveDir, toolbox.DefaultDirPerm); err != nil {
 		toolbox.PrintError("Could not create the archives directory: %v", err)
 		return err
 	}

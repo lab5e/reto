@@ -43,11 +43,11 @@ func Build(tagVersion, commitNewRelease bool, overrideName, overrideEmail string
 		return errors.New("uncommitted changes")
 	}
 
-	if !NewFileVersions(ctx.Config) {
+	if !NewFileVersions(ctx.Config, true) {
 		return errors.New("no file changes")
 	}
 
-	if err := os.Mkdir(fmt.Sprintf("release/%s", ctx.Version), toolbox.DefaultFilePerm); err != nil {
+	if err := os.Mkdir(fmt.Sprintf("release/%s", ctx.Version), toolbox.DefaultDirPerm); err != nil {
 		toolbox.PrintError("Could not create release directory: %v", err)
 		return err
 	}
@@ -84,7 +84,7 @@ func Build(tagVersion, commitNewRelease bool, overrideName, overrideEmail string
 	}
 
 	archivePath := fmt.Sprintf("release/archives/%s", ctx.Version)
-	if err := os.Mkdir(archivePath, toolbox.DefaultFilePerm); err != nil {
+	if err := os.Mkdir(archivePath, toolbox.DefaultDirPerm); err != nil {
 		toolbox.PrintError("Unable to create archive directory %s: %v", archivePath, err)
 		return err
 	}

@@ -6,7 +6,8 @@ import (
 	"os"
 )
 
-const DefaultFilePerm = 0700
+const DefaultFilePerm = 0644
+const DefaultDirPerm = 0755
 
 // CopyFile copies the a file from A to B. The file B must not exist prior to this
 func CopyFile(from, to string) error {
