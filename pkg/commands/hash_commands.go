@@ -5,6 +5,7 @@ import (
 
 	"github.com/ExploratoryEngineering/releasetool/pkg/gitutil"
 	"github.com/ExploratoryEngineering/releasetool/pkg/hashname"
+	"github.com/ExploratoryEngineering/releasetool/pkg/release"
 	"github.com/ExploratoryEngineering/releasetool/pkg/toolbox"
 )
 
@@ -15,7 +16,11 @@ type hashNameCommand struct {
 }
 
 func (c *hashCommand) Run(rc RunContext) error {
-	hash, err := gitutil.GetCurrentHash()
+	ctx, err := release.Verify()
+	if err != nil {
+		return err
+	}
+	hash, err := gitutil.GetCurrentHash(ctx.Config.SourceRoot)
 	if err != nil {
 		toolbox.PrintError("Unable to read git hash: %v", err)
 		return err
@@ -25,7 +30,11 @@ func (c *hashCommand) Run(rc RunContext) error {
 }
 
 func (c *hashNameCommand) Run(rc RunContext) error {
-	hash, err := gitutil.GetCurrentHash()
+	ctx, err := release.Verify()
+	if err != nil {
+		return err
+	}
+	hash, err := gitutil.GetCurrentHash(ctx.Config.SourceRoot)
 	if err != nil {
 		toolbox.PrintError("Unable to read git hash: %v", err)
 		return err

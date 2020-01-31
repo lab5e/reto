@@ -4,14 +4,15 @@ import (
 	"errors"
 	"fmt"
 	"io/ioutil"
+	"path/filepath"
 	"strings"
 )
 
 // GetCurrentHash returns the current hash for HEAD by digging through
 // the .git directory. The hash is stored somewhere in .git/refs/heads and
 // the file .git/HEAD points to the current branch
-func GetCurrentHash() (string, error) {
-	buf, err := ioutil.ReadFile(".git/HEAD")
+func GetCurrentHash(rootDir string) (string, error) {
+	buf, err := ioutil.ReadFile(filepath.Join(rootDir, ".git/HEAD"))
 	if err != nil {
 		return "", err
 	}

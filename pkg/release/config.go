@@ -10,6 +10,7 @@ import (
 )
 
 type File struct {
+	ID   string `json:"id"`
 	Name string `json:"name"`
 	OS   string `json:"os"`
 	Arch string `json:"arch"`
@@ -53,6 +54,7 @@ func sampleConfig() Config {
 		OSes:          []string{"TODO: set operating system (darwin, linux, netbsd, openbsp, plan9, windows...)"},
 		Files: []File{
 			File{
+				ID:   "TODO: set ID for file",
 				Name: "TODO: Add your built files here",
 				OS:   "TODO: Set OS for file here, '-' if it doesn't apply",
 				Arch: "TODO: Set architecture for file here, '-' if it doesn't apply",

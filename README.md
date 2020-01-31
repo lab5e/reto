@@ -4,6 +4,30 @@ This is a tool to package and manage both releases and versions. Both a version
 number and a git hash is kept to keep track of the build. The git hash is encoded
 to a human readable short hash.
 
+## Goals
+
+The goal of this tool is to aid in binary releases with archives. Releases can
+be managed in the source tree itself or outside the source tree. The release
+files should be under SCM (but the generated archives shouldn't)
+
+The release tool can either be used as part of a manual release or as part
+of a scripted release.
+
+### What the releasetool does
+
+* Keeps track of version numbers
+* Create archives with releases
+* Manages the changelog for each release
+
+### What the releasetool doesn't do
+
+* Upload releases
+* Build release
+* Writes a changelog for you
+* Talks to external systems
+
+This is something you want to do in your own scripts.
+
 ## Commands
 
 init - set up the release tool and the release directory
@@ -26,6 +50,28 @@ $ bin/releasetool namehash frantic-bennie
 ```
 
 To find the matching commit to a name use `git log -n 1 $(bin/releasetool namehash calculating-aldona)`
+
+## Configuration file
+
+```json
+{
+    "sourceRoot": ".",
+    "architectures": [
+        "amd64"
+    ],
+    "oses": [
+        "darwin"
+    ],
+    "files": [
+        {
+            "id": "tool",
+            "name": "bin/release",
+            "os": "darwin",
+            "arch": "amd64"
+        }
+    ]
+}
+```
 
 ## Release information in builds
 

@@ -8,6 +8,7 @@
     ],
     "files": [
         {
+            "id": "tool",
             "name": "bin/release",
             "os": "darwin",
             "arch": "amd64"
