@@ -79,6 +79,8 @@ func readConfig() (Config, error) {
 
 // VerifyConfig verifies that the artifact config is correct
 func VerifyConfig(config Config) error {
-
+	if err := toolbox.CheckForTODO(ConfigPath); err != nil {
+		return err
+	}
 	return errors.New("not implemented")
 }

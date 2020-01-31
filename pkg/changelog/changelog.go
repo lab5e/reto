@@ -3,7 +3,6 @@ package changelog
 import (
 	"errors"
 	"io/ioutil"
-	"strings"
 
 	"github.com/ExploratoryEngineering/releasetool/pkg/toolbox"
 )
@@ -56,25 +55,7 @@ func CopyTemplate() error {
 // It will print an error message on stderr witht the line number and return an error
 // if one or more TODO strings are found. It's simple but for a reason :)
 func WorkingCopyIsComplete() error {
-	// ensure the working copy is complete, basically just look for strings with "TODO"
-	buf, err := ioutil.ReadFile(WorkingChangelog)
-	if err != nil {
-		toolbox.PrintError("Could not read working changelog: %v", err)
-		return err
-	}
-
-	lines := strings.Split(string(buf), "\n")
-	todos := 0
-	for i, v := range lines {
-		if strings.Index(v, "TODO") > 0 {
-			toolbox.PrintError("Found TODO statement on line %d in %s", i+1, WorkingChangelog)
-			todos++
-		}
-	}
-	if todos > 0 {
-		return errors.New("not completed")
-	}
-	return nil
+	return toolbox.CheckForTODO(WorkingChangelog)
 }
 
 // ReleaseChangelog makes a copy of the working copy, puts it in the release directory
