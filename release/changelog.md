@@ -1,6 +1,10 @@
 
-# Changelog {{ version }}: {{ name }}
+# Changelog {{ Version }}: {{ Name }}
 
 ## Features
 
-Release configuration
+This is the release for **{{ Target }}**. The code name for this release is 
+{{ Name }} and the commit hash is {{ CommitHash }}
+
+* Release configuration
+* Archive building

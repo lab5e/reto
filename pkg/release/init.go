@@ -4,7 +4,6 @@ import (
 	"io/ioutil"
 	"os"
 
-	"github.com/ExploratoryEngineering/releasetool/pkg/changelog"
 	"github.com/ExploratoryEngineering/releasetool/pkg/toolbox"
 )
 
@@ -53,11 +52,7 @@ func InitTool() error {
 		return err
 	}
 
-	// Make template files
-	if err := changelog.MakeTemplate(); err != nil {
-		return err
-	}
-	if err := changelog.CopyTemplate(); err != nil {
+	if err := initChangelog(); err != nil {
 		return err
 	}
 

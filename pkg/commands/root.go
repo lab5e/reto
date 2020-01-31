@@ -1,5 +1,6 @@
 package commands
 
+// Root is the root command
 type Root struct {
 	Ver      versionFlag     `kong:"name='ver',short='v',help='Show release tool version'"`
 	Init     initCommand     `kong:"cmd,help='Initialise release tool'"`
@@ -12,10 +13,13 @@ type Root struct {
 	Release  releaseCommand  `kong:"cmd,help='Generate a release from existing binaries'"`
 }
 
+// ReleaseCommands is the command parameters
 func (r *Root) ReleaseCommands() Root {
 	return *r
 }
 
+// RunContext is a context for the commands. This decouples the parameter struct
+// from the commands... just slightly
 type RunContext interface {
 	ReleaseCommands() Root
 }

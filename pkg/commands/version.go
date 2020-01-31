@@ -11,7 +11,7 @@ type versionCommand struct {
 }
 
 func (c *versionCommand) Run(rc RunContext) error {
-	config, err := release.Verify()
+	config, err := release.GetContext()
 	if err != nil {
 		return err
 	}

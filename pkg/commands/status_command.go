@@ -3,7 +3,6 @@ package commands
 import (
 	"fmt"
 
-	"github.com/ExploratoryEngineering/releasetool/pkg/changelog"
 	"github.com/ExploratoryEngineering/releasetool/pkg/release"
 )
 
@@ -11,7 +10,7 @@ type statusCommand struct {
 }
 
 func (c *statusCommand) Run(rc RunContext) error {
-	ctx, err := release.Verify()
+	ctx, err := release.GetContext()
 	if err != nil {
 		return err
 	}
@@ -22,6 +21,7 @@ func (c *statusCommand) Run(rc RunContext) error {
 	}
 
 	fmt.Printf("Active version: %s\n", ctx.Version)
+	fmt.Printf("Commit Hash:    %s\n", ctx.CommitHash)
 	fmt.Printf("Released:       %s\n", released)
 	fmt.Println()
 	fmt.Println("Configuration:")
@@ -35,7 +35,7 @@ func (c *statusCommand) Run(rc RunContext) error {
 	}
 	fmt.Println()
 
-	if changelog.WorkingCopyIsComplete() == nil {
+	if release.ChangelogComplete() == nil {
 		fmt.Println("Changelog is OK")
 	}
 

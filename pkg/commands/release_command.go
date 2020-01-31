@@ -3,7 +3,6 @@ package commands
 import (
 	"errors"
 
-	"github.com/ExploratoryEngineering/releasetool/pkg/changelog"
 	"github.com/ExploratoryEngineering/releasetool/pkg/release"
 	"github.com/ExploratoryEngineering/releasetool/pkg/toolbox"
 )
@@ -12,7 +11,7 @@ type releaseCommand struct {
 }
 
 func (c *releaseCommand) Run(rc RunContext) error {
-	ctx, err := release.Verify()
+	ctx, err := release.GetContext()
 	if err != nil {
 		return err
 	}
@@ -22,7 +21,7 @@ func (c *releaseCommand) Run(rc RunContext) error {
 	}
 
 	// Do a quick sanity check on the change log
-	if err := changelog.WorkingCopyIsComplete(); err != nil {
+	if err := release.ChangelogComplete(); err != nil {
 		return err
 	}
 	if err := release.VerifyConfig(ctx.Config); err != nil {

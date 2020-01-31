@@ -8,6 +8,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/ExploratoryEngineering/releasetool/pkg/gitutil"
 	"github.com/ExploratoryEngineering/releasetool/pkg/toolbox"
 )
 
@@ -16,16 +17,18 @@ var VersionFile = "release/VERSION"
 
 // Context is a general release configuration type
 type Context struct {
-	Config   Config
-	Version  string
-	Major    int
-	Minor    int
-	Patch    int
-	Released bool
+	Config     Config
+	Version    string
+	Major      int
+	Minor      int
+	Patch      int
+	Released   bool
+	Target     string
+	CommitHash string
 }
 
-// Verify verifies that the release tool is initialized
-func Verify() (*Context, error) {
+// GetContext verifies that the release tool is initialized
+func GetContext() (*Context, error) {
 	if _, err := os.Stat(VersionFile); err != nil {
 		toolbox.PrintError("Can't read the version file: %v", err)
 		return nil, errors.New("no version file")
@@ -81,6 +84,10 @@ func Verify() (*Context, error) {
 		return nil, err
 	}
 
+	ret.CommitHash, err = gitutil.GetCurrentHash(ret.Config.SourceRoot)
+	if err != nil {
+		return nil, err
+	}
 	ret.Config, err = readConfig()
 	if err != nil {
 		return nil, err

@@ -3,7 +3,6 @@ package commands
 import (
 	"fmt"
 
-	"github.com/ExploratoryEngineering/releasetool/pkg/gitutil"
 	"github.com/ExploratoryEngineering/releasetool/pkg/hashname"
 	"github.com/ExploratoryEngineering/releasetool/pkg/release"
 	"github.com/ExploratoryEngineering/releasetool/pkg/toolbox"
@@ -16,30 +15,21 @@ type hashNameCommand struct {
 }
 
 func (c *hashCommand) Run(rc RunContext) error {
-	ctx, err := release.Verify()
+	ctx, err := release.GetContext()
 	if err != nil {
 		return err
 	}
-	hash, err := gitutil.GetCurrentHash(ctx.Config.SourceRoot)
-	if err != nil {
-		toolbox.PrintError("Unable to read git hash: %v", err)
-		return err
-	}
-	fmt.Printf("%s\n", hash)
+
+	fmt.Printf("%s\n", ctx.CommitHash)
 	return nil
 }
 
 func (c *hashNameCommand) Run(rc RunContext) error {
-	ctx, err := release.Verify()
+	ctx, err := release.GetContext()
 	if err != nil {
 		return err
 	}
-	hash, err := gitutil.GetCurrentHash(ctx.Config.SourceRoot)
-	if err != nil {
-		toolbox.PrintError("Unable to read git hash: %v", err)
-		return err
-	}
-	fmt.Printf("%s\n", hashname.HashToName(hash))
+	fmt.Printf("%s\n", hashname.HashToName(ctx.CommitHash))
 	return nil
 }
 
