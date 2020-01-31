@@ -24,6 +24,33 @@ $ bin/releasetool namehash frantic-bennie
 2b85aa
 ```
 
+To find the matching commit to a name use `git log -n 1 $(bin/releasetool namehash calculating-aldona)`
+
+## Release information in builds
+
+### Go
+
+```make
+version := $(shell bin/releasetool version)
+commit := $(shell bin/releasetool hash)
+name := $(shell bin/releasetool hashname)
+build_time := $(shell date +"%Y-%m-%dT%H:%M")
+
+ldflags := -X github.com/ExploratoryEngineering/releasetool/pkg/version.Number=$(version) \
+    -X github.com/ExploratoryEngineering/releasetool/pkg/version.Name=$(name) \
+    -X github.com/ExploratoryEngineering/releasetool/pkg/version.CommitHash=$(commit) \
+    -X github.com/ExploratoryEngineering/releasetool/pkg/version.BuildTime=$(build_time)
+
+rel:
+    cd cmd/releasetool && go build -ldflags "$(ldflags)" -o ../../bin/releasetool
+```
+
+### C/C++
+
+Use the -D<define> to set the configuration option at build time
+
+### West/Zephyr
+
 ## Random ramblings
 
 Basic assumptions:

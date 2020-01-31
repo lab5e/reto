@@ -18,6 +18,7 @@ type Root struct {
 	Init     initCommand     `kong:"cmd,help='Initialise release tool'"`
 	Version  versionCommand  `kong:"cmd,help='Show current version'"`
 	Bump     bumpCommand     `kong:"cmd,help='Version bumping'"`
+	Hash     hashCommand     `kong:"cmd,help='Display current git hash'"`
 	Hashname hashNameCommand `kong:"cmd,help='Display current git hash as human readable name'"`
 	Namehash nameHashCommand `kong:"cmd,help='Display human readable name as git hash'"`
 }

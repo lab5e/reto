@@ -7,7 +7,20 @@ import (
 	"github.com/ExploratoryEngineering/releasetool/pkg/hashname"
 )
 
+type hashCommand struct {
+}
+
 type hashNameCommand struct {
+}
+
+func (c *hashCommand) Run(rc RunContext) error {
+	hash, err := gitutil.GetCurrentHash()
+	if err != nil {
+		printError("Unable to read git hash: %v", err)
+		return err
+	}
+	fmt.Printf("%s\n", hash)
+	return nil
 }
 
 func (c *hashNameCommand) Run(rc RunContext) error {
