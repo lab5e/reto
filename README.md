@@ -107,3 +107,11 @@ Each version is
 Internal
 
 External
+
+## Release process
+
+1. Make sure it isn't already released (ie version isn't in release list)
+1. Make release directory
+1. Construct change log by appending current release note
+1. Checksum binaries, write checksum file
+1. Make archive with binaries, checksum file and change log

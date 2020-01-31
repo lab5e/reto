@@ -8,7 +8,7 @@ import (
 const (
 	releaseDir      = "release"
 	initialVersion  = "0.0.0"
-	versionFilePerm = 0600
+	defaultFilePerm = 0700
 )
 
 var versionFile = fmt.Sprintf("%s%cVERSION", releaseDir, os.PathSeparator)
@@ -21,6 +21,7 @@ type Root struct {
 	Hash     hashCommand     `kong:"cmd,help='Display current git hash'"`
 	Hashname hashNameCommand `kong:"cmd,help='Display current git hash as human readable name'"`
 	Namehash nameHashCommand `kong:"cmd,help='Display human readable name as git hash'"`
+	Status   statusCommand   `kong:"cmd,help='Display current status'"`
 }
 
 func (r *Root) ReleaseCommands() Root {

@@ -2,16 +2,18 @@ package commands
 
 import (
 	"fmt"
+	"io/ioutil"
 	"os"
+
+	"github.com/ExploratoryEngineering/releasetool/pkg/templates"
 )
 
 type initCommand struct {
 }
 
 func (c *initCommand) Run(rc RunContext) error {
-	fmt.Println("This is the init command")
-	// Make sure the release directory exists
-	err := os.Mkdir(releaseDir, versionFilePerm)
+	// Make sure the release directory doesn't exist
+	err := os.Mkdir(releaseDir, defaultFilePerm)
 	if os.IsExist(err) {
 		printError("The 'release' directory already exists.")
 		return err
@@ -41,6 +43,29 @@ func (c *initCommand) Run(rc RunContext) error {
 		return err
 	}
 
-	fmt.Printf("Initialized version to %s\n", initialVersion)
+	templateDir := fmt.Sprintf("%s%ctemplates", releaseDir, os.PathSeparator)
+
+	if err := os.Mkdir(templateDir, defaultFilePerm); err != nil {
+		printError("Could not create the template directory: %v", err)
+		return err
+	}
+
+	// Make template files
+	templateFile := fmt.Sprintf("%s%cchangelog-template.md", templateDir, os.PathSeparator)
+	if err := ioutil.WriteFile(
+		templateFile,
+		[]byte(templates.DefaultChangeLogTemplate), defaultFilePerm); err != nil {
+		printError("Unable to create the release log template: %v", err)
+		return err
+	}
+
+	// Copy the template into the release folder
+	workingChangelog := fmt.Sprintf("%s%cchangelog.md", releaseDir, os.PathSeparator)
+	if err := copyFile(templateFile, workingChangelog); err != nil {
+		printError("Could not copy changelog template to release directory: %v", err)
+		return err
+	}
+
+	fmt.Printf("Initialized version to %s. Working change log is in %s%cchangelog.md\n", initialVersion, releaseDir, os.PathSeparator)
 	return nil
 }

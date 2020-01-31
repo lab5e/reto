@@ -66,3 +66,14 @@ func verifySetup() (*releaseConfig, error) {
 
 	return &ret, nil
 }
+
+func copyFile(from, to string) error {
+	input, err := ioutil.ReadFile(from)
+	if err != nil {
+		return err
+	}
+	if err := ioutil.WriteFile(to, input, defaultFilePerm); err != nil {
+		return err
+	}
+	return nil
+}

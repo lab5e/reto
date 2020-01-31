@@ -56,7 +56,7 @@ func (c *bumpCommand) Run(rc RunContext) error {
 
 	newVersion := fmt.Sprintf("%d.%d.%d", config.Major, config.Minor, config.Patch)
 
-	if err := ioutil.WriteFile(versionFile, []byte(newVersion), versionFilePerm); err != nil {
+	if err := ioutil.WriteFile(versionFile, []byte(newVersion), defaultFilePerm); err != nil {
 		printError("Error writing version file: %v", err)
 		return err
 	}
