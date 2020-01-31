@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"strconv"
 	"strings"
 )
 
@@ -32,7 +33,36 @@ func verifySetup() (*releaseConfig, error) {
 		printError("Version file does not contain a version")
 		return nil, errors.New("no version found")
 	}
-	return &releaseConfig{
+	ret := releaseConfig{
 		Version: lines[0],
-	}, nil
+	}
+
+	var versionErr = errors.New("invalid version content")
+	tuples := strings.Split(ret.Version, ".")
+	if len(tuples) != 3 {
+		printError("Version string is malformed: %s", ret.Version)
+		return nil, versionErr
+	}
+	v, err := strconv.ParseInt(tuples[0], 10, 63)
+	if err != nil {
+		printError("Major version is not an integer: %s", ret.Version)
+		return nil, versionErr
+	}
+	ret.Major = int(v)
+
+	v, err = strconv.ParseInt(tuples[1], 10, 63)
+	if err != nil {
+		printError("Minor version is not an integer: %s", ret.Version)
+		return nil, versionErr
+	}
+	ret.Minor = int(v)
+
+	v, err = strconv.ParseInt(tuples[2], 10, 63)
+	if err != nil {
+		printError("Patch version is not an integer: %s", ret.Version)
+		return nil, versionErr
+	}
+	ret.Patch = int(v)
+
+	return &ret, nil
 }

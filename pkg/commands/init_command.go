@@ -11,7 +11,7 @@ type initCommand struct {
 func (c *initCommand) Run(rc RunContext) error {
 	fmt.Println("This is the init command")
 	// Make sure the release directory exists
-	err := os.Mkdir(releaseDir, 0700)
+	err := os.Mkdir(releaseDir, versionFilePerm)
 	if os.IsExist(err) {
 		printError("The 'release' directory already exists.")
 		return err
