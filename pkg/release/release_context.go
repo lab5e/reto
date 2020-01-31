@@ -11,10 +11,11 @@ import (
 	"github.com/ExploratoryEngineering/releasetool/pkg/toolbox"
 )
 
+// VersionFile is the path to the fil containing the version
 var VersionFile = "release/VERSION"
 
-// ReleaseContext is a general release configuration type
-type ReleaseContext struct {
+// Context is a general release configuration type
+type Context struct {
 	Config   Config
 	Version  string
 	Major    int
@@ -24,7 +25,7 @@ type ReleaseContext struct {
 }
 
 // Verify verifies that the release tool is initialized
-func Verify() (*ReleaseContext, error) {
+func Verify() (*Context, error) {
 	if _, err := os.Stat(VersionFile); err != nil {
 		toolbox.PrintError("Can't read the version file: %v", err)
 		return nil, errors.New("no version file")
@@ -39,7 +40,7 @@ func Verify() (*ReleaseContext, error) {
 		toolbox.PrintError("Version file does not contain a version")
 		return nil, errors.New("no version found")
 	}
-	ret := ReleaseContext{
+	ret := Context{
 		Version: lines[0],
 	}
 

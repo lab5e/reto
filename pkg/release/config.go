@@ -9,12 +9,14 @@ import (
 	"github.com/ExploratoryEngineering/releasetool/pkg/toolbox"
 )
 
+// File is the configuration setting for a single file
 type File struct {
 	ID     string `json:"id"`
 	Name   string `json:"name"`
 	Target string `json:"target"`
 }
 
+// Config is the tool configuration
 type Config struct {
 	SourceRoot string   `json:"sourceRoot"`
 	Name       string   `json:"name"`
@@ -22,6 +24,7 @@ type Config struct {
 	Files      []File   `json:"files"`
 }
 
+// ConfigPath is the path to the configuration file
 const ConfigPath = "release/config.json"
 
 // WriteSampleConfig writes a sample configuration to the release directory

@@ -2,13 +2,28 @@
     "sourceRoot": ".",
     "name": "releasetool",
     "targets": [
-        "darwin-amd64"
+        "darwin-amd64", "linux-amd64", "windows-amd64", "linux-arm"
     ],
     "files": [
         {
             "id": "tool",
-            "name": "bin/release",
+            "name": "bin/releasetool.darwin-amd64",
             "target": "darwin-amd64"
+        },
+        {
+            "id": "tool",
+            "name": "bin/releasetool.linux-amd64",
+            "target": "linux-amd64"
+        },
+        {
+            "id": "tool",
+            "name": "bin/releasetool.linux-arm",
+            "target": "linux-arm"
+        },
+        {
+            "id": "tool",
+            "name": "bin/releasetool.windows-amd64",
+            "target": "windows-amd64"
         },
         {
             "id": "readme",
