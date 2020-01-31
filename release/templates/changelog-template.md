@@ -1,18 +1,18 @@
 
-# Changelog {{ version }}: {{ name }}
+## Changelog {{ .Version }}: {{ .Name }}
 
-## Features
+### Features
 
 [TODO: Write new features]
 
-## API
+### API
 
 [TODO: Changes to the API]
 
-## Command line
+### Command line
 
 [TODO: Command line changes]
 
-## Other
+### Other
 
 [TODO: Write other changes here]

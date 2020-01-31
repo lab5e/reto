@@ -29,7 +29,7 @@ func (c *hashNameCommand) Run(rc RunContext) error {
 	if err != nil {
 		return err
 	}
-	fmt.Printf("%s\n", hashname.HashToName(ctx.CommitHash))
+	fmt.Printf("%s\n", ctx.Name)
 	return nil
 }
 

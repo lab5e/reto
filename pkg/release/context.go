@@ -9,6 +9,7 @@ import (
 	"strings"
 
 	"github.com/ExploratoryEngineering/releasetool/pkg/gitutil"
+	"github.com/ExploratoryEngineering/releasetool/pkg/hashname"
 	"github.com/ExploratoryEngineering/releasetool/pkg/toolbox"
 )
 
@@ -23,8 +24,8 @@ type Context struct {
 	Minor      int
 	Patch      int
 	Released   bool
-	Target     string
 	CommitHash string
+	Name       string
 }
 
 // GetContext verifies that the release tool is initialized
@@ -88,6 +89,7 @@ func GetContext() (*Context, error) {
 	if err != nil {
 		return nil, err
 	}
+	ret.Name = hashname.HashToName(ret.CommitHash)
 	ret.Config, err = readConfig()
 	if err != nil {
 		return nil, err

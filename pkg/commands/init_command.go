@@ -13,6 +13,6 @@ func (c *initCommand) Run(rc RunContext) error {
 	if err := release.InitTool(); err != nil {
 		return err
 	}
-	fmt.Printf("Initialized releasetool.")
+	fmt.Printf("Initialized releasetool.\n")
 	return nil
 }

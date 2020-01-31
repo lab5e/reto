@@ -137,5 +137,16 @@ func VerifyConfig(config Config) error {
 	if errs > 0 {
 		return errors.New("target missing")
 	}
+
+	for _, file := range config.Files {
+		if _, err := os.Stat(file.Name); err != nil {
+			if os.IsNotExist(err) {
+				toolbox.PrintError("The file %s does not exist", file.Name)
+				return err
+			}
+			toolbox.PrintError("Could not access %s: %v", file.Name, err)
+			return err
+		}
+	}
 	return nil
 }

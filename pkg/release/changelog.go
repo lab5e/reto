@@ -11,27 +11,27 @@ import (
 
 // DefaultChangeLogTemplate is the default template for the changelog
 var DefaultChangeLogTemplate = `
-# Changelog {{ version }}: {{ name }}
+## Changelog {{ .Version }}: {{ .Name }}
 
-## Features
+### Features
 
 [TODO: Write new features]
 
-## API
+### API
 
 [TODO: Changes to the API]
 
-## Command line
+### Command line
 
 [TODO: Command line changes]
 
-## Other
+### Other
 
 [TODO: Write other changes here]
 `
 
 // TemplatePath is the path to the changelog template
-const TemplatePath = "releases/templates/changelog-template.md"
+const TemplatePath = "release/templates/changelog-template.md"
 
 // WorkingChangelog is the working version of the changelog
 const WorkingChangelog = "release/changelog.md"
@@ -88,6 +88,7 @@ func releaseChangelog(ctx *Context) error {
 	t, err := template.New("changelog").Parse(string(buf))
 	if err != nil {
 		toolbox.PrintError("Could not parse working copy of changelog: %v", err)
+		return err
 	}
 
 	releaseChangelog := fmt.Sprintf("release/%s/changelog.md", ctx.Version)
