@@ -2,7 +2,6 @@ package commands
 
 import (
 	"errors"
-	"fmt"
 
 	"github.com/ExploratoryEngineering/releasetool/pkg/changelog"
 	"github.com/ExploratoryEngineering/releasetool/pkg/release"
@@ -29,7 +28,8 @@ func (c *releaseCommand) Run(rc RunContext) error {
 	if err := release.VerifyConfig(ctx.Config); err != nil {
 		return err
 	}
-	fmt.Println("Doing release")
-
+	for _, target := range ctx.Config.Targets {
+		release.BuildRelease(ctx, target)
+	}
 	return nil
 }

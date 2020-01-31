@@ -1,5 +1,6 @@
 {
     "sourceRoot": ".",
+    "name": "releasetool",
     "targets": [
         "darwin-amd64"
     ],

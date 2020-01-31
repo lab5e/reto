@@ -17,6 +17,7 @@ type File struct {
 
 type Config struct {
 	SourceRoot string   `json:"sourceRoot"`
+	Name       string   `json:"name"`
 	Targets    []string `json:"targets"`
 	Files      []File   `json:"files"`
 }
@@ -48,6 +49,7 @@ func WriteSampleConfig() error {
 func sampleConfig() Config {
 	return Config{
 		SourceRoot: ".",
+		Name:       "TODO set your product name",
 		Targets:    []string{"TODO: set target (amd64-darwin, arm-linux, mips-plan9...)"},
 		Files: []File{
 			File{
