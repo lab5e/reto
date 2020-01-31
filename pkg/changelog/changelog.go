@@ -28,7 +28,10 @@ var DefaultChangeLogTemplate = `
 [TODO: Write other changes here]
 `
 
-const TemplatePath = "release/templates/changelog-template.md"
+// TemplatePath is the path to the changelog template
+const TemplatePath = "releases/templates/changelog-template.md"
+
+// WorkingChangelog is the working version of the changelog
 const WorkingChangelog = "release/changelog.md"
 
 // MakeTemplate creates the changelog template file
