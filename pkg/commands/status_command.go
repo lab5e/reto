@@ -1,8 +1,9 @@
 package commands
 
-import "fmt"
-
-import "os"
+import (
+	"fmt"
+	"os"
+)
 
 type statusCommand struct {
 }
