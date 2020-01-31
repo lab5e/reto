@@ -17,6 +17,14 @@ func printError(fmtString string, opts ...interface{}) {
 	fmt.Fprintf(os.Stderr, "releasetool: %s\n", fmt.Sprintf(fmtString, opts...))
 }
 
+type releaseConfig struct {
+	Version  string
+	Major    int
+	Minor    int
+	Patch    int
+	Released bool
+}
+
 // verifySetup verifies that the release tool is initialized
 func verifySetup() (*releaseConfig, error) {
 	if _, err := os.Stat(versionFile); err != nil {
@@ -63,6 +71,16 @@ func verifySetup() (*releaseConfig, error) {
 		return nil, versionErr
 	}
 	ret.Patch = int(v)
+
+	_, err = os.Stat(fmt.Sprintf("%s%c%s", releaseDir, os.PathSeparator, ret.Version))
+	ret.Released = true
+	if os.IsNotExist(err) {
+		ret.Released = false
+	}
+	if err != nil && !os.IsNotExist(err) {
+		printError("Could not read release directory: %v", err)
+		return nil, err
+	}
 
 	return &ret, nil
 }

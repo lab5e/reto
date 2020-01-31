@@ -31,10 +31,3 @@ func (r *Root) ReleaseCommands() Root {
 type RunContext interface {
 	ReleaseCommands() Root
 }
-
-type releaseConfig struct {
-	Version string
-	Major   int
-	Minor   int
-	Patch   int
-}
