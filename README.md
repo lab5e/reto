@@ -1,6 +1,28 @@
 # Release tool
 
-This is a tool to package and manage both releases and versions.
+This is a tool to package and manage both releases and versions. Both a version
+number and a git hash is kept to keep track of the build. The git hash is encoded
+to a human readable short hash.
+
+## Commands
+
+init - set up the release tool and the release directory
+version - dump the current version to stdout. Useful for build scripts
+bump - increase major, minor or patch version
+hashname - dump the name of the current git hash
+namehash - convert name into git hash
+
+## On hash naming
+
+It works like this:
+```shell
+$ git rev-parse --short=6 HEAD
+2b85aa
+$ bin/releasetool hashname
+frantic-bennie
+$ bin/releasetool namehash frantic-bennie
+2b85aa
+```
 
 ## Random ramblings
 

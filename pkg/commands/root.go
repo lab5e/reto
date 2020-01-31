@@ -14,9 +14,12 @@ const (
 var versionFile = fmt.Sprintf("%s%cVERSION", releaseDir, os.PathSeparator)
 
 type Root struct {
-	Init    initCommand    `kong:"cmd,help='Initialise release tool'"`
-	Version versionCommand `kong:"cmd,help='Show current version'"`
-	Bump    bumpCommand    `kong:"cmd,help='Version bumping'"`
+	Ver      versionFlag     `kong:"name='ver',short='v',help='Show release tool version'"`
+	Init     initCommand     `kong:"cmd,help='Initialise release tool'"`
+	Version  versionCommand  `kong:"cmd,help='Show current version'"`
+	Bump     bumpCommand     `kong:"cmd,help='Version bumping'"`
+	Hashname hashNameCommand `kong:"cmd,help='Display current git hash as human readable name'"`
+	Namehash nameHashCommand `kong:"cmd,help='Display human readable name as git hash'"`
 }
 
 func (r *Root) ReleaseCommands() Root {

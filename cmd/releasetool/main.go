@@ -1,9 +1,10 @@
 package main
 
 import (
+	"os"
+
 	"github.com/ExploratoryEngineering/releasetool/pkg/commands"
 	"github.com/alecthomas/kong"
-	"os"
 )
 
 func main() {
@@ -21,12 +22,10 @@ func main() {
 		kong.Description("Release tool"),
 		kong.UsageOnError(),
 		kong.ConfigureHelp(kong.HelpOptions{
-			Compact: true,
-			Summary: true,
-		}))
-	// This binds the interface ctrlc.RunContext to the implementation we're
-	// using.
-	ctx.BindTo(&param, (*commands.RunContext)(nil))
+			Compact:      true,
+			NoAppSummary: true,
+			Summary:      true,
+		}), kong.BindTo(&param, (*commands.RunContext)(nil)))
 	if err := ctx.Run(); err != nil {
 		// Won't print the error since the commands will do it
 		os.Exit(1)

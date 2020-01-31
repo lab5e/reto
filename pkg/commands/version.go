@@ -14,6 +14,6 @@ func (c *versionCommand) Run(rc RunContext) error {
 		return err
 	}
 
-	fmt.Printf("%s", config.Version)
+	fmt.Printf("%s\n", config.Version)
 	return nil
 }
