@@ -19,5 +19,5 @@ local-rel:
 builds: local-rel
 	cd cmd/releasetool && GOOS=darwin GOARCH=amd64 go build -ldflags "$(ldflags)" -o ../../bin/releasetool.darwin-amd64	
 	cd cmd/releasetool && GOOS=linux GOARCH=amd64 go build -ldflags "$(ldflags)" -o ../../bin/releasetool.linux-amd64
-	cd cmd/releasetool && GOOS=windows GOARCH=amd64 go build -ldflags "$(ldflags)" -o ../../bin/releasetool.linux-amd64
+	cd cmd/releasetool && GOOS=windows GOARCH=amd64 go build -ldflags "$(ldflags)" -o ../../bin/releasetool.windows-amd64
 	cd cmd/releasetool && GOOS=linux GOARCH=arm go build -ldflags "$(ldflags)" -o ../../bin/releasetool.linux-arm
