@@ -14,6 +14,8 @@ type Root struct {
 	Status   statusCommand   `kong:"cmd,help='Display current status'"`
 	Release  releaseCommand  `kong:"cmd,help='Generate a release from existing binaries'"`
 	Test     testCommand     `kong:"cmd,help='Command for testing.'"`
+	Checksum checksumCommand `kong:"cmd,help='Show checksum for built files'"`
+	Verify   verifyCommand   `kong:"cmd,help='Verify checksum on archive and files inside archive'"`
 }
 
 // ReleaseCommands is the command parameters
@@ -31,6 +33,12 @@ type testCommand struct {
 }
 
 func (c *testCommand) Run(rc RunContext) error {
-	release.MergeChangelogs()
+	ctx, err := release.GetContext()
+	if err != nil {
+		return err
+	}
+	if err := release.GenerateSHA256File(ctx); err != nil {
+		return err
+	}
 	return nil
 }
