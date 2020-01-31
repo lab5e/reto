@@ -61,7 +61,22 @@ func sampleConfig() Config {
 	}
 }
 
+func readConfig() (Config, error) {
+	buf, err := ioutil.ReadFile(ConfigPath)
+	if err != nil {
+		toolbox.PrintError("Could not read configuration: %v", err)
+		return Config{}, err
+	}
+	ret := Config{}
+	if err := json.Unmarshal(buf, &ret); err != nil {
+		toolbox.PrintError("Configuration file format error: %v", err)
+		return Config{}, err
+	}
+	return ret, nil
+}
+
 // VerifyConfig verifies that the artifact config is correct
-func VerifyConfig() error {
+func VerifyConfig(config Config) error {
+
 	return errors.New("not implemented")
 }

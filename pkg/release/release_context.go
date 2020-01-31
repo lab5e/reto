@@ -15,6 +15,7 @@ var VersionFile = "release/VERSION"
 
 // ReleaseContext is a general release configuration type
 type ReleaseContext struct {
+	Config   Config
 	Version  string
 	Major    int
 	Minor    int
@@ -79,5 +80,9 @@ func Verify() (*ReleaseContext, error) {
 		return nil, err
 	}
 
+	ret.Config, err = readConfig()
+	if err != nil {
+		return nil, err
+	}
 	return &ret, nil
 }
