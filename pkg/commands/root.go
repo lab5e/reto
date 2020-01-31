@@ -1,17 +1,8 @@
 package commands
 
-import (
-	"fmt"
-	"os"
-)
-
 const (
-	releaseDir      = "release"
-	initialVersion  = "0.0.0"
-	defaultFilePerm = 0700
+	initialVersion = "0.0.0"
 )
-
-var versionFile = fmt.Sprintf("%s%cVERSION", releaseDir, os.PathSeparator)
 
 type Root struct {
 	Ver      versionFlag     `kong:"name='ver',short='v',help='Show release tool version'"`
@@ -22,6 +13,7 @@ type Root struct {
 	Hashname hashNameCommand `kong:"cmd,help='Display current git hash as human readable name'"`
 	Namehash nameHashCommand `kong:"cmd,help='Display human readable name as git hash'"`
 	Status   statusCommand   `kong:"cmd,help='Display current status'"`
+	Release  releaseCommand  `kong:"cmd,help='Generate a release from existing binaries'"`
 }
 
 func (r *Root) ReleaseCommands() Root {

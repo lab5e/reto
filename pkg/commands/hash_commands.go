@@ -5,6 +5,7 @@ import (
 
 	"github.com/ExploratoryEngineering/releasetool/pkg/gitutil"
 	"github.com/ExploratoryEngineering/releasetool/pkg/hashname"
+	"github.com/ExploratoryEngineering/releasetool/pkg/toolbox"
 )
 
 type hashCommand struct {
@@ -16,7 +17,7 @@ type hashNameCommand struct {
 func (c *hashCommand) Run(rc RunContext) error {
 	hash, err := gitutil.GetCurrentHash()
 	if err != nil {
-		printError("Unable to read git hash: %v", err)
+		toolbox.PrintError("Unable to read git hash: %v", err)
 		return err
 	}
 	fmt.Printf("%s\n", hash)
@@ -26,7 +27,7 @@ func (c *hashCommand) Run(rc RunContext) error {
 func (c *hashNameCommand) Run(rc RunContext) error {
 	hash, err := gitutil.GetCurrentHash()
 	if err != nil {
-		printError("Unable to read git hash: %v", err)
+		toolbox.PrintError("Unable to read git hash: %v", err)
 		return err
 	}
 	fmt.Printf("%s\n", hashname.HashToName(hash))
@@ -40,7 +41,7 @@ type nameHashCommand struct {
 func (c *nameHashCommand) Run(rc RunContext) error {
 	hash, err := hashname.NameToHash(rc.ReleaseCommands().Namehash.Name)
 	if err != nil {
-		printError("Unable to convert name into hash: %v", err)
+		toolbox.PrintError("Unable to convert name into hash: %v", err)
 		return err
 	}
 	fmt.Printf("%s\n", hash)

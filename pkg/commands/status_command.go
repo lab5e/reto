@@ -2,13 +2,15 @@ package commands
 
 import (
 	"fmt"
+
+	"github.com/ExploratoryEngineering/releasetool/pkg/release"
 )
 
 type statusCommand struct {
 }
 
 func (c *statusCommand) Run(rc RunContext) error {
-	config, err := verifySetup()
+	config, err := release.Verify()
 	if err != nil {
 		return err
 	}

@@ -1,0 +1,16 @@
+{
+    "sourceRoot": ".",
+    "architectures": [
+        "amd64"
+    ],
+    "oses": [
+        "darwin"
+    ],
+    "files": [
+        {
+            "name": "bin/release",
+            "os": "darwin",
+            "arch": "amd64"
+        }
+    ]
+}

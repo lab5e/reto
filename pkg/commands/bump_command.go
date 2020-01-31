@@ -5,6 +5,9 @@ import (
 	"fmt"
 	"io/ioutil"
 	"strings"
+
+	"github.com/ExploratoryEngineering/releasetool/pkg/release"
+	"github.com/ExploratoryEngineering/releasetool/pkg/toolbox"
 )
 
 type bumpCommand struct {
@@ -14,14 +17,14 @@ type bumpCommand struct {
 }
 
 func (c *bumpCommand) Run(rc RunContext) error {
-	config, err := verifySetup()
+	config, err := release.Verify()
 	if err != nil {
 		return err
 	}
 
 	tuples := strings.Split(config.Version, ".")
 	if len(tuples) != 3 {
-		printError("Invalid version string in version file: %s", config.Version)
+		toolbox.PrintError("Invalid version string in version file: %s", config.Version)
 		return errors.New("invalid version")
 	}
 
@@ -45,19 +48,19 @@ func (c *bumpCommand) Run(rc RunContext) error {
 	}
 
 	if bumps == 0 {
-		printError("Must specify which version to bump")
+		toolbox.PrintError("Must specify which version to bump")
 		return errors.New("no bump")
 	}
 
 	if bumps != 1 {
-		printError("Only onf of bump major, minor or patch can be bumped")
+		toolbox.PrintError("Only onf of bump major, minor or patch can be bumped")
 		return errors.New("arg error")
 	}
 
 	newVersion := fmt.Sprintf("%d.%d.%d", config.Major, config.Minor, config.Patch)
 
-	if err := ioutil.WriteFile(versionFile, []byte(newVersion), defaultFilePerm); err != nil {
-		printError("Error writing version file: %v", err)
+	if err := ioutil.WriteFile(release.VersionFile, []byte(newVersion), toolbox.DefaultFilePerm); err != nil {
+		toolbox.PrintError("Error writing version file: %v", err)
 		return err
 	}
 	fmt.Printf("New version is now %s\n", newVersion)

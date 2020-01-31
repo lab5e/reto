@@ -2,10 +2,11 @@ package commands
 
 import (
 	"fmt"
-	"io/ioutil"
 	"os"
 
-	"github.com/ExploratoryEngineering/releasetool/pkg/templates"
+	"github.com/ExploratoryEngineering/releasetool/pkg/changelog"
+	"github.com/ExploratoryEngineering/releasetool/pkg/release"
+	"github.com/ExploratoryEngineering/releasetool/pkg/toolbox"
 )
 
 type initCommand struct {
@@ -13,59 +14,55 @@ type initCommand struct {
 
 func (c *initCommand) Run(rc RunContext) error {
 	// Make sure the release directory doesn't exist
-	err := os.Mkdir(releaseDir, defaultFilePerm)
+	err := os.Mkdir("release", toolbox.DefaultFilePerm)
 	if os.IsExist(err) {
-		printError("The 'release' directory already exists.")
+		toolbox.PrintError("The 'release' directory already exists.")
 		return err
 	}
 	if err != nil {
-		printError("Error creating the release directory: %v", err)
+		toolbox.PrintError("Error creating the release directory: %v", err)
 		return err
 	}
 
-	f, err := os.Create(versionFile)
+	f, err := os.Create(release.VersionFile)
 	if os.IsExist(err) {
-		printError("The VERSION file already exists in the release directory")
+		toolbox.PrintError("The VERSION file already exists in the release directory")
 		return err
 	}
 	if err != nil {
-		printError("Error creating the %s file: %v", versionFile, err)
+		toolbox.PrintError("Error creating the %s file: %v", release.VersionFile, err)
 		return err
 	}
 	defer f.Close()
 	_, err = f.Write([]byte(initialVersion))
 	if os.IsPermission(err) {
-		printError("Permission denied on the %s file. Can't write initial version", versionFile)
+		toolbox.PrintError("Permission denied on the %s file. Can't write initial version", release.VersionFile)
 		return err
 	}
 	if err != nil {
-		printError("Error writing initial version to the %s file: %v", versionFile, err)
+		toolbox.PrintError("Error writing initial version to the %s file: %v", release.VersionFile, err)
 		return err
 	}
 
-	templateDir := fmt.Sprintf("%s%ctemplates", releaseDir, os.PathSeparator)
+	templateDir := "release/templates"
 
-	if err := os.Mkdir(templateDir, defaultFilePerm); err != nil {
-		printError("Could not create the template directory: %v", err)
+	if err := os.Mkdir(templateDir, toolbox.DefaultFilePerm); err != nil {
+		toolbox.PrintError("Could not create the template directory: %v", err)
 		return err
 	}
 
 	// Make template files
-	templateFile := fmt.Sprintf("%s%cchangelog-template.md", templateDir, os.PathSeparator)
-	if err := ioutil.WriteFile(
-		templateFile,
-		[]byte(templates.DefaultChangeLogTemplate), defaultFilePerm); err != nil {
-		printError("Unable to create the release log template: %v", err)
+	if err := changelog.MakeTemplate(); err != nil {
+		return err
+	}
+	if err := changelog.CopyTemplate(); err != nil {
 		return err
 	}
 
-	// Copy the template into the release folder
-	workingChangelog := fmt.Sprintf("%s%cchangelog.md", releaseDir, os.PathSeparator)
-	if err := copyFile(templateFile, workingChangelog); err != nil {
-		printError("Could not copy changelog template to release directory: %v", err)
+	if err := release.WriteSampleConfig(); err != nil {
 		return err
 	}
 
-	fmt.Printf("Initialized version to %s. Working change log is in %s%cchangelog.md\n", initialVersion, releaseDir, os.PathSeparator)
+	fmt.Printf("Initialized version to %s. Working change log is in release/changelog.md\n", initialVersion)
 	return nil
 }
