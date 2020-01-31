@@ -1,9 +1,5 @@
 package commands
 
-const (
-	initialVersion = "0.0.0"
-)
-
 type Root struct {
 	Ver      versionFlag     `kong:"name='ver',short='v',help='Show release tool version'"`
 	Init     initCommand     `kong:"cmd,help='Initialise release tool'"`
