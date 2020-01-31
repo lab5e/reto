@@ -13,5 +13,11 @@ ldflags := -X github.com/ExploratoryEngineering/releasetool/pkg/version.Number=$
 	-X github.com/ExploratoryEngineering/releasetool/pkg/version.CommitHash=$(commit) \
 	-X github.com/ExploratoryEngineering/releasetool/pkg/version.BuildTime=$(build_time)
 
-rel:
+local-rel:
 	cd cmd/releasetool && go build -ldflags "$(ldflags)" -o ../../bin/releasetool
+
+builds: local-rel
+	cd cmd/releasetool && GOOS=darwin GOARCH=amd64 go build -ldflags "$(ldflags)" -o ../../bin/releasetool.darwin-amd64	
+	cd cmd/releasetool && GOOS=linux GOARCH=amd64 go build -ldflags "$(ldflags)" -o ../../bin/releasetool.linux-amd64
+	cd cmd/releasetool && GOOS=windows GOARCH=amd64 go build -ldflags "$(ldflags)" -o ../../bin/releasetool.linux-amd64
+	cd cmd/releasetool && GOOS=linux GOARCH=arm go build -ldflags "$(ldflags)" -o ../../bin/releasetool.linux-arm
