@@ -13,8 +13,13 @@ const (
 var versionFile = fmt.Sprintf("%s%cVERSION", releaseDir, os.PathSeparator)
 
 type Root struct {
-	Init initCommand `kong:"cmd,help='Initialise release tool'"`
+	Init    initCommand    `kong:"cmd,help='Initialise release tool'"`
+	Version versionCommand `kong:"cmd,help='Show current version'"`
 }
 
 type RunContext interface {
+}
+
+type releaseConfig struct {
+	Version string
 }

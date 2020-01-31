@@ -13,31 +13,31 @@ func (c *initCommand) Run(rc RunContext) error {
 	// Make sure the release directory exists
 	err := os.Mkdir(releaseDir, 0700)
 	if os.IsExist(err) {
-		fmt.Println("The 'release' directory already exists.")
+		printError("The 'release' directory already exists.")
 		return err
 	}
 	if err != nil {
-		fmt.Printf("Error creating the release directory: %v\n", err)
+		printError("Error creating the release directory: %v", err)
 		return err
 	}
 
 	f, err := os.Create(versionFile)
 	if os.IsExist(err) {
-		fmt.Println("The VERSION file already exists in the release directory")
+		printError("The VERSION file already exists in the release directory")
 		return err
 	}
 	if err != nil {
-		fmt.Printf("Error creating the %s file: %v\n", versionFile, err)
+		printError("Error creating the %s file: %v", versionFile, err)
 		return err
 	}
 	defer f.Close()
 	_, err = f.Write([]byte(initialVersion))
 	if os.IsPermission(err) {
-		fmt.Printf("Permission denied on the %s file. Can't write initial version\n", versionFile)
+		printError("Permission denied on the %s file. Can't write initial version", versionFile)
 		return err
 	}
 	if err != nil {
-		fmt.Printf("Error writing initial version to the %s file: %v\n", versionFile, err)
+		printError("Error writing initial version to the %s file: %v", versionFile, err)
 		return err
 	}
 
