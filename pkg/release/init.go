@@ -66,7 +66,7 @@ func InitTool() error {
 		return err
 	}
 
-	if err := ioutil.WriteFile("release/.gitignore", []byte("archive"), toolbox.DefaultFilePerm); err != nil {
+	if err := ioutil.WriteFile("release/.gitignore", []byte("archivea\n"), toolbox.DefaultFilePerm); err != nil {
 		toolbox.PrintError("Could not create .gitignore file in release directory: %v", err)
 		return err
 	}

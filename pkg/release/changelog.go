@@ -5,13 +5,15 @@ import (
 	"html/template"
 	"io/ioutil"
 	"os"
+	"sort"
+	"strings"
 
 	"github.com/ExploratoryEngineering/releasetool/pkg/toolbox"
 )
 
 // DefaultChangeLogTemplate is the default template for the changelog
 var DefaultChangeLogTemplate = `
-## Changelog {{ .Version }}: {{ .Name }}
+## v{{ .Version }}: {{ .Name }}
 
 ### Features
 
@@ -28,6 +30,8 @@ var DefaultChangeLogTemplate = `
 ### Other
 
 [TODO: Write other changes here]
+
+Commit hash: {{ .CommitHash }}
 `
 
 // TemplatePath is the path to the changelog template
@@ -104,4 +108,54 @@ func releaseChangelog(ctx *Context) error {
 		return err
 	}
 	return nil
+}
+
+// MergeChangelogs merges all of the changelogs into one big buffer
+func MergeChangelogs() ([]byte, error) {
+	fmt.Println("Merging changelogs...")
+
+	fileinfos, err := ioutil.ReadDir("release")
+	if err != nil {
+		toolbox.PrintError("Could not read release directory: %v", err)
+		return nil, err
+	}
+
+	inputs := make([]string, 0)
+	for _, fi := range fileinfos {
+		changelogPath := fmt.Sprintf("release/%s/changelog.md", fi.Name())
+		if fi.IsDir() && toolbox.IsFile(changelogPath) {
+			inputs = append(inputs, changelogPath)
+		}
+	}
+	sort.Strings(inputs)
+	var ret []byte
+	for i := len(inputs) - 1; i >= 0; i-- {
+		fmt.Println(inputs[i])
+		ret = append(ret, []byte("\n\n")...)
+		buf, err := ioutil.ReadFile(inputs[i])
+		if err != nil {
+			toolbox.PrintError("Could not read changelog at %s: %v", inputs[i], err)
+			return nil, err
+		}
+		ret = append(ret, buf...)
+	}
+	ret = append(ret, byte('\n'))
+
+	// Remove multi-line separators just to make markdown linters happy
+	consecutiveSpaces := 0
+	mergedFile := "# Changelog"
+
+	for _, line := range strings.Split(string(ret), "\n") {
+		if strings.TrimSpace(line) == "" {
+			consecutiveSpaces++
+		} else {
+			consecutiveSpaces = 0
+		}
+		if consecutiveSpaces > 1 {
+			continue
+		}
+		mergedFile = mergedFile + "\n" + line
+	}
+	fmt.Printf("%d changelogs merged\n", len(inputs))
+	return []byte(mergedFile), nil
 }

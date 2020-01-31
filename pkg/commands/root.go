@@ -1,5 +1,7 @@
 package commands
 
+import "github.com/ExploratoryEngineering/releasetool/pkg/release"
+
 // Root is the root command
 type Root struct {
 	Ver      versionFlag     `kong:"name='ver',short='v',help='Show release tool version'"`
@@ -11,6 +13,7 @@ type Root struct {
 	Namehash nameHashCommand `kong:"cmd,help='Display human readable name as git hash'"`
 	Status   statusCommand   `kong:"cmd,help='Display current status'"`
 	Release  releaseCommand  `kong:"cmd,help='Generate a release from existing binaries'"`
+	Test     testCommand     `kong:"cmd,help='Command for testing.'"`
 }
 
 // ReleaseCommands is the command parameters
@@ -22,4 +25,12 @@ func (r *Root) ReleaseCommands() Root {
 // from the commands... just slightly
 type RunContext interface {
 	ReleaseCommands() Root
+}
+
+type testCommand struct {
+}
+
+func (c *testCommand) Run(rc RunContext) error {
+	release.MergeChangelogs()
+	return nil
 }
