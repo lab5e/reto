@@ -1,17 +1,18 @@
 {
     "sourceRoot": ".",
-    "architectures": [
-        "amd64"
-    ],
-    "oses": [
-        "darwin"
+    "targets": [
+        "darwin-amd64"
     ],
     "files": [
         {
             "id": "tool",
             "name": "bin/release",
-            "os": "darwin",
-            "arch": "amd64"
+            "target": "darwin-amd64"
+        },
+        {
+            "id": "readme",
+            "name": "README.md",
+            "target": "-"
         }
     ]
 }

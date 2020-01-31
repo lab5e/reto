@@ -24,17 +24,13 @@ func (c *statusCommand) Run(rc RunContext) error {
 	fmt.Printf("Released:       %s\n", released)
 	fmt.Println()
 	fmt.Println("Configuration:")
-	fmt.Println("  Architectures: ")
-	for _, v := range config.Config.Architectures {
-		fmt.Printf("  - %s\n", v)
-	}
-	fmt.Println("  OSes:")
-	for _, v := range config.Config.OSes {
+	fmt.Println("  Targets: ")
+	for _, v := range config.Config.Targets {
 		fmt.Printf("  - %s\n", v)
 	}
 	fmt.Println("  Files:")
 	for _, v := range config.Config.Files {
-		fmt.Printf("  - %s (%s, %s)\n", v.Name, v.Arch, v.OS)
+		fmt.Printf("  - %s/%s\n", v.Name, v.Target)
 	}
 	fmt.Println()
 

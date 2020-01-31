@@ -10,17 +10,15 @@ import (
 )
 
 type File struct {
-	ID   string `json:"id"`
-	Name string `json:"name"`
-	OS   string `json:"os"`
-	Arch string `json:"arch"`
+	ID     string `json:"id"`
+	Name   string `json:"name"`
+	Target string `json:"target"`
 }
 
 type Config struct {
-	SourceRoot    string   `json:"sourceRoot"`
-	Architectures []string `json:"architectures"`
-	OSes          []string `json:"oses"`
-	Files         []File   `json:"files"`
+	SourceRoot string   `json:"sourceRoot"`
+	Targets    []string `json:"targets"`
+	Files      []File   `json:"files"`
 }
 
 const ConfigPath = "release/config.json"
@@ -49,15 +47,13 @@ func WriteSampleConfig() error {
 // sampleConfig is the sample configuration file.
 func sampleConfig() Config {
 	return Config{
-		SourceRoot:    ".",
-		Architectures: []string{"TODO: set architecture (amd64, arm, 386, mips...)"},
-		OSes:          []string{"TODO: set operating system (darwin, linux, netbsd, openbsp, plan9, windows...)"},
+		SourceRoot: ".",
+		Targets:    []string{"TODO: set target (amd64-darwin, arm-linux, mips-plan9...)"},
 		Files: []File{
 			File{
-				ID:   "TODO: set ID for file",
-				Name: "TODO: Add your built files here",
-				OS:   "TODO: Set OS for file here, '-' if it doesn't apply",
-				Arch: "TODO: Set architecture for file here, '-' if it doesn't apply",
+				ID:     "TODO: set ID for file",
+				Name:   "TODO: Add your built files here",
+				Target: "TODO: Set target for file here, '-' if it doesn't apply",
 			},
 		},
 	}
@@ -77,10 +73,64 @@ func readConfig() (Config, error) {
 	return ret, nil
 }
 
+const anyTarget = "-"
+
 // VerifyConfig verifies that the artifact config is correct
 func VerifyConfig(config Config) error {
 	if err := toolbox.CheckForTODO(ConfigPath); err != nil {
 		return err
 	}
-	return errors.New("not implemented")
+	if len(config.Targets) == 0 {
+		toolbox.PrintError("There are no targets in the configuration file")
+		return errors.New("no targets")
+	}
+	if len(config.Files) == 0 {
+		toolbox.PrintError("There are no output files in the configuration file")
+		return errors.New("no targets")
+	}
+
+	fileTargets := make(map[string]map[string]bool)
+	for _, v := range config.Files {
+		if v.Target == anyTarget {
+			continue
+		}
+		existing, ok := fileTargets[v.ID]
+		if !ok {
+			existing = make(map[string]bool)
+		}
+		existing[v.Target] = true
+		fileTargets[v.ID] = existing
+	}
+
+	errs := 0
+	for id, v := range fileTargets {
+		targets := make(map[string]bool)
+		for _, t := range config.Targets {
+			if t == anyTarget {
+				continue
+			}
+			targets[t] = true
+		}
+		for target := range v {
+			if target == anyTarget {
+				continue
+			}
+			_, ok := targets[target]
+			if !ok {
+				toolbox.PrintError("File with ID '%s' have unknown target %s", id, target)
+				errs++
+			}
+			delete(targets, target)
+		}
+		if len(targets) > 0 {
+			for target := range targets {
+				toolbox.PrintError("File with ID '%s' is missing target %s", id, target)
+				errs++
+			}
+		}
+	}
+	if errs > 0 {
+		return errors.New("target missing")
+	}
+	return nil
 }
