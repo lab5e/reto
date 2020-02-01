@@ -1,4 +1,4 @@
-module github.com/ExploratoryEngineering/releasetool
+module github.com/ExploratoryEngineering/reto
 
 go 1.13
 

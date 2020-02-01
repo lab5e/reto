@@ -8,9 +8,9 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/ExploratoryEngineering/releasetool/pkg/gitutil"
-	"github.com/ExploratoryEngineering/releasetool/pkg/hashname"
-	"github.com/ExploratoryEngineering/releasetool/pkg/toolbox"
+	"github.com/ExploratoryEngineering/reto/pkg/gitutil"
+	"github.com/ExploratoryEngineering/reto/pkg/hashname"
+	"github.com/ExploratoryEngineering/reto/pkg/toolbox"
 )
 
 // VersionFile is the path to the fil containing the version

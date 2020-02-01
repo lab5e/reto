@@ -3,9 +3,9 @@ package commands
 import (
 	"fmt"
 
-	"github.com/ExploratoryEngineering/releasetool/pkg/hashname"
-	"github.com/ExploratoryEngineering/releasetool/pkg/release"
-	"github.com/ExploratoryEngineering/releasetool/pkg/toolbox"
+	"github.com/ExploratoryEngineering/reto/pkg/hashname"
+	"github.com/ExploratoryEngineering/reto/pkg/release"
+	"github.com/ExploratoryEngineering/reto/pkg/toolbox"
 )
 
 type hashCommand struct {

@@ -8,7 +8,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/ExploratoryEngineering/releasetool/pkg/toolbox"
+	"github.com/ExploratoryEngineering/reto/pkg/toolbox"
 )
 
 // DefaultChangeLogTemplate is the default template for the changelog

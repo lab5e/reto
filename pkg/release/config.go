@@ -6,7 +6,7 @@ import (
 	"io/ioutil"
 	"os"
 
-	"github.com/ExploratoryEngineering/releasetool/pkg/toolbox"
+	"github.com/ExploratoryEngineering/reto/pkg/toolbox"
 )
 
 // File is the configuration setting for a single file

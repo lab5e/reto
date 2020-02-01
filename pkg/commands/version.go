@@ -3,7 +3,7 @@ package commands
 import (
 	"fmt"
 
-	"github.com/ExploratoryEngineering/releasetool/pkg/release"
+	"github.com/ExploratoryEngineering/reto/pkg/release"
 )
 
 // versionCommand displays the current version

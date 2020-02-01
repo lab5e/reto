@@ -10,7 +10,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/ExploratoryEngineering/releasetool/pkg/toolbox"
+	"github.com/ExploratoryEngineering/reto/pkg/toolbox"
 )
 
 // GenerateSHA256File generates a text file with SHA256 checksums for the files

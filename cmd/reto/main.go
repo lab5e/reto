@@ -3,8 +3,8 @@ package main
 import (
 	"os"
 
-	"github.com/ExploratoryEngineering/releasetool/pkg/commands"
-	"github.com/ExploratoryEngineering/releasetool/pkg/toolbox"
+	"github.com/ExploratoryEngineering/reto/pkg/commands"
+	"github.com/ExploratoryEngineering/reto/pkg/toolbox"
 	"github.com/alecthomas/kong"
 )
 
@@ -19,7 +19,7 @@ func main() {
 
 	var param commands.Root
 	ctx := kong.Parse(&param,
-		kong.Name("releasetool"),
+		kong.Name("reto"),
 		kong.Description("Release tool"),
 		kong.UsageOnError(),
 		kong.ConfigureHelp(kong.HelpOptions{

@@ -1,6 +1,6 @@
 {
     "sourceRoot": ".",
-    "name": "releasetool",
+    "name": "reto",
     "targets": [
         "darwin-amd64",
         "linux-amd64",
@@ -10,22 +10,22 @@
     "files": [
         {
             "id": "tool",
-            "name": "bin/releasetool.darwin-amd64",
+            "name": "bin/reto.darwin-amd64",
             "target": "darwin-amd64"
         },
         {
             "id": "tool",
-            "name": "bin/releasetool.linux-amd64",
+            "name": "bin/reto.linux-amd64",
             "target": "linux-amd64"
         },
         {
             "id": "tool",
-            "name": "bin/releasetool.linux-arm",
+            "name": "bin/reto.linux-arm",
             "target": "linux-arm"
         },
         {
             "id": "tool",
-            "name": "bin/releasetool.windows-amd64",
+            "name": "bin/reto.windows-amd64",
             "target": "windows-amd64"
         },
         {

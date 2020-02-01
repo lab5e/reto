@@ -8,7 +8,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/ExploratoryEngineering/releasetool/pkg/toolbox"
+	"github.com/ExploratoryEngineering/reto/pkg/toolbox"
 )
 
 // Build builds a new release from the current setup

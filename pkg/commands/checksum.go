@@ -1,6 +1,6 @@
 package commands
 
-import "github.com/ExploratoryEngineering/releasetool/pkg/release"
+import "github.com/ExploratoryEngineering/reto/pkg/release"
 
 type checksumCommand struct {
 }

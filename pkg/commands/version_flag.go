@@ -3,7 +3,7 @@ package commands
 import (
 	"fmt"
 
-	"github.com/ExploratoryEngineering/releasetool/pkg/version"
+	"github.com/ExploratoryEngineering/reto/pkg/version"
 	"github.com/alecthomas/kong"
 )
 

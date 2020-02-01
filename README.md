@@ -1,4 +1,11 @@
-# Release tool
+# reto - The release tool
+
+## Installing
+
+Install by running `go install -u https://github.com/ExploratoryEngineering/reto` if you
+have Go installed.
+
+## About
 
 This is a tool to manage releases and change logs for releases. Strictly
 speaking is't just a zip file generator with versioning.
@@ -78,15 +85,15 @@ the following (the example is for the tool itself):
 ```json
 {
     "sourceRoot": ".",
-    "name": "releasetool",
+    "name": "reto",
     "targets": [
         "darwin-amd64", "linux-amd64", "windows-amd64", "linux-arm"
     ],
     "files": [
-        { "id": "tool", "name": "bin/releasetool.darwin-amd64","target": "darwin-amd64" },
-        { "id": "tool", "name": "bin/releasetool.linux-amd64", "target": "linux-amd64" },
-        { "id": "tool", "name": "bin/releasetool.linux-arm", "target": "linux-arm" },
-        { "id": "tool", "name": "bin/releasetool.windows-amd64", "target": "windows-amd64" },
+        { "id": "tool", "name": "bin/reto.darwin-amd64","target": "darwin-amd64" },
+        { "id": "tool", "name": "bin/reto.linux-amd64", "target": "linux-amd64" },
+        { "id": "tool", "name": "bin/reto.linux-arm", "target": "linux-arm" },
+        { "id": "tool", "name": "bin/reto.windows-amd64", "target": "windows-amd64" },
         { "id": "readme", "name": "README.md", "target": "-" }
     ]
 }
@@ -132,7 +139,7 @@ at the tool itself the file `pkg/version/version.go` contains the variables
 If you build the executable with the `ldflags` parameter set like this:
 
 ```shell
-go build -ldflags "-X github.com/ExploratoryEngineering/releasetool/pkg/version.Number=1.0.0 -X github.com/ExploratoryEngineering/releasetool/pkg/version.Name=psychological-karson -X github.com/ExploratoryEngineering/releasetool/pkg/version.CommitHash=e02bc6cd8ab3edd3d6e8874d1e97c08ef6c5db49 -X github.com/ExploratoryEngineering/releasetool/pkg/version.BuildTime=2020-02-01T22:35"
+go build -ldflags "-X github.com/ExploratoryEngineering/reto/pkg/version.Number=1.0.0 -X github.com/ExploratoryEngineering/reto/pkg/version.Name=psychological-karson -X github.com/ExploratoryEngineering/reto/pkg/version.CommitHash=e02bc6cd8ab3edd3d6e8874d1e97c08ef6c5db49 -X github.com/ExploratoryEngineering/reto/pkg/version.BuildTime=2020-02-01T22:35"
 ```
 
 The variables will be set to `1.0.0`, `psychological-karson`,
