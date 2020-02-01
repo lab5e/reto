@@ -1,18 +1,6 @@
 
 ## Changelog {{ .Version }}: {{ .Name }}
 
-### Features
+Rename to "reto" since "releasetool" is too much typing for us lazy folks.
 
-[TODO: Write new features]
-
-### API
-
-[TODO: Changes to the API]
-
-### Command line
-
-[TODO: Command line changes]
-
-### Other
-
-[TODO: Write other changes here]
+I'm not going to make a client tool.
