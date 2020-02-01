@@ -64,6 +64,10 @@ func Build() error {
 			return err
 		}
 	}
+
+	if err := generateChecksumFile(ctx, buf); err != nil {
+		return err
+	}
 	return nil
 }
 
