@@ -1,6 +1,4 @@
 
-## Changelog 1.1.0: professorial-kyra
+## Changelog 1.1.0: physical-anne
 
-### Features
-
-Check if files exist
+Added `--root` flag if binary is started outside the root directory.

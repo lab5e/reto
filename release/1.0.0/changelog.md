@@ -1,6 +1,4 @@
 
-## Changelog 1.0.0: dejected-effie
+## Changelog 1.0.0: physical-anne
 
-### Features
-
-The first release of the tool. This is just for testing
+Initial version.
