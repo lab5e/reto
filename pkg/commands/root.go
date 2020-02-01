@@ -5,6 +5,7 @@ import "github.com/ExploratoryEngineering/releasetool/pkg/release"
 // Root is the root command
 type Root struct {
 	Ver      versionFlag     `kong:"name='ver',short='v',help='Show release tool version'"`
+	Root     string          `kong:"short='r',help='Root directory for the tool'"`
 	Init     initCommand     `kong:"cmd,help='Initialise release tool'"`
 	Version  versionCommand  `kong:"cmd,help='Show current version'"`
 	Bump     bumpCommand     `kong:"cmd,help='Version bumping'"`

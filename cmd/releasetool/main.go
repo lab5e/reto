@@ -4,6 +4,7 @@ import (
 	"os"
 
 	"github.com/ExploratoryEngineering/releasetool/pkg/commands"
+	"github.com/ExploratoryEngineering/releasetool/pkg/toolbox"
 	"github.com/alecthomas/kong"
 )
 
@@ -26,6 +27,13 @@ func main() {
 			NoAppSummary: true,
 			Summary:      true,
 		}), kong.BindTo(&param, (*commands.RunContext)(nil)))
+
+	if param.Root != "" {
+		if err := os.Chdir(param.Root); err != nil {
+			toolbox.PrintError("Couldn't change directory to %s", param.Root)
+			os.Exit(1)
+		}
+	}
 	if err := ctx.Run(); err != nil {
 		// Won't print the error since the commands will do it
 		os.Exit(1)
