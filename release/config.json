@@ -2,7 +2,10 @@
     "sourceRoot": ".",
     "name": "releasetool",
     "targets": [
-        "darwin-amd64", "linux-amd64", "windows-amd64", "linux-arm"
+        "darwin-amd64",
+        "linux-amd64",
+        "windows-amd64",
+        "linux-arm"
     ],
     "files": [
         {
