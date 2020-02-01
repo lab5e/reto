@@ -4,6 +4,13 @@ This is a tool to package and manage both releases and versions. Both a version
 number and a git hash is kept to keep track of the build. The git hash is encoded
 to a human readable short hash.
 
+## TODO
+
+* Finish README
+* Verify it works outside of tree (or skip source parameter)
+* Tag versions in Git
+* Cleanups
+
 ## Goals
 
 The goal of this tool is to aid in binary releases with archives. Releases can
@@ -161,3 +168,5 @@ External
 1. Construct change log by appending current release note
 1. Checksum binaries, write checksum file
 1. Make archive with binaries, checksum file and change log
+
+
