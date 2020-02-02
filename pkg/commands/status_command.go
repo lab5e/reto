@@ -26,11 +26,16 @@ func (c *statusCommand) Run(rc RunContext) error {
 		return err
 	}
 
+	fmt.Println("Checking templates")
 	templateErr := release.TemplatesComplete(ctx, rc.ReleaseCommands().Status.Verbose)
+	fmt.Println("Checking config")
 	configErr := release.VerifyConfig(ctx.Config, rc.ReleaseCommands().Status.Verbose)
+	fmt.Println("Checking old releases")
 	changedFiles := release.NewFileVersions(ctx.Config, rc.ReleaseCommands().Status.Verbose)
+	fmt.Println("Checking SCM")
 	gitChanges := !gitutil.HasChanges(ctx.Config.SourceRoot)
 
+	fmt.Println()
 	fmt.Printf("Configuration:       %s\n", okNotOK(configErr == nil))
 	fmt.Printf("Working templates:   %s\n", okNotOK(templateErr == nil))
 	fmt.Printf("Version number:      %s\n", okNotOK(!ctx.Released))

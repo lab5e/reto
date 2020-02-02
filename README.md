@@ -10,7 +10,7 @@ have Go installed.
 This is a tool to manage releases and change logs for releases. Strictly
 speaking is't just a zip file generator with versioning.
 
-Some of the The goals for the tool are:
+Some of the the goals for the tool are:
 
 * Work within the source tree without imposing any weird build steps.
 * Be non-intrusive.
@@ -91,6 +91,11 @@ the following (the example is for the tool itself):
     "targets": [
         "darwin-amd64", "linux-amd64", "windows-amd64", "linux-arm"
     ],
+    "templates": [
+        { "name": "changelog.md", "action": "concatenate" },
+        { "name": "verify.txt",   "action": "include" },
+        { "name": "releases.txt", "action": "concatenate" }
+    ]
     "files": [
         { "id": "tool", "name": "bin/reto.darwin-amd64","target": "darwin-amd64" },
         { "id": "tool", "name": "bin/reto.linux-amd64", "target": "linux-amd64" },
@@ -111,6 +116,10 @@ the following (the example is for the tool itself):
   single string (if you have a single target) or multiple strings depending on
   what (and how) you build your released binaries. The strings can be anything
   as long as they are unique.
+* `templates` are templates for files included in the release archives. They can
+  either be included as is (with `action` set to "include") or they can be
+  aggregated logs (like a changelog) that are aggregates of this and all previous
+  releases.
 * The `files` section contains a list of files. Each file has an `id` property
   that groups the differnt files into one. If a file is common for all targets
   use the target `'-'`, typically text files, PDFs or images. If you list three

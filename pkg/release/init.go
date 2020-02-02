@@ -52,11 +52,11 @@ func InitTool() error {
 		return err
 	}
 
-	if err := initSampleTemplates(); err != nil {
+	if err := initTemplates(); err != nil {
 		return err
 	}
 
-	if err := WriteSampleConfig(); err != nil {
+	if err := writeSampleConfig(); err != nil {
 		return err
 	}
 

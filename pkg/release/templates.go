@@ -50,8 +50,21 @@ func TemplatesComplete(ctx *Context, printErrors bool) error {
 	return nil
 }
 
-func initSampleTemplates() error {
-	return ioutil.WriteFile("templates/changelog.md", []byte(sampleChangelog), toolbox.DefaultFilePerm)
+func initTemplates() error {
+	templateFile := fmt.Sprintf("%s/changelog.md", templateDir)
+	if err := ioutil.WriteFile(templateFile, []byte(sampleChangelog), toolbox.DefaultFilePerm); err != nil {
+		toolbox.PrintError("Could not create sample file %s", templateFile)
+	}
+
+	for _, template := range defaultConfig().Templates {
+		templateFile := fmt.Sprintf("%s/%s", templateDir, template.Name)
+		workingCopy := fmt.Sprintf("release/%s", template.Name)
+		if err := toolbox.CopyFile(templateFile, workingCopy); err != nil {
+			toolbox.PrintError("Could not copy %s to release directory: %v", workingCopy, err)
+			return err
+		}
+	}
+	return nil
 }
 
 // Expand the template vars in the working copy of the changelog.

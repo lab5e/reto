@@ -15,6 +15,21 @@ import (
 
 // Build builds a new release from the current setup
 func Build(tagVersion, commitNewRelease bool, overrideName, overrideEmail string) error {
+	fi, err := os.Stat(archiveDir)
+	if err != nil {
+		if err := os.Mkdir(archiveDir, toolbox.DefaultDirPerm); err != nil {
+			toolbox.PrintError("Could not create archive directory: %v", err)
+			return err
+		}
+	}
+	if err != nil {
+		toolbox.PrintError("Can't check status of archive dir: %v", err)
+		return err
+	}
+	if !fi.IsDir() {
+		toolbox.PrintError("%s is not a directory", archiveDir)
+		return errors.New("no archive")
+	}
 	ctx, err := GetContext()
 	if err != nil {
 		return err

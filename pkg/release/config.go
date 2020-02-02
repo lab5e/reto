@@ -3,6 +3,7 @@ package release
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"os"
 
@@ -47,8 +48,8 @@ type Config struct {
 // ConfigPath is the path to the configuration file
 const ConfigPath = "release/config.json"
 
-// WriteSampleConfig writes a sample configuration to the release directory
-func WriteSampleConfig() error {
+// writeSampleConfig writes a sample configuration to the release directory
+func writeSampleConfig() error {
 	_, err := os.Stat(ConfigPath)
 	if !os.IsNotExist(err) {
 		toolbox.PrintError("Configuration file already exists")
@@ -189,6 +190,25 @@ func VerifyConfig(config Config, printErrors bool) error {
 			toolbox.PrintError("Could not access %s: %v", file.Name, err)
 			return err
 		}
+	}
+
+	errs = 0
+	for _, template := range config.Templates {
+		if template.Name == "" {
+			toolbox.PrintError("Found template with no name in configuration")
+			errs++
+		}
+		if !toolbox.IsFile(fmt.Sprintf("%s/%s", templateDir, template.Name)) {
+			toolbox.PrintError("Template %s does not exist", template.Name)
+			errs++
+		}
+		if template.TemplateAction != IncludeAction && template.TemplateAction != ConcatenateAction {
+			toolbox.PrintError("Unknown action for template %s: %s", template.Name, template.TemplateAction)
+			errs++
+		}
+	}
+	if errs > 0 {
+		return errors.New("template error")
 	}
 	return nil
 }
