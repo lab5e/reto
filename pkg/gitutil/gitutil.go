@@ -6,6 +6,7 @@ import (
 	"github.com/ExploratoryEngineering/reto/pkg/toolbox"
 
 	"gopkg.in/src-d/go-git.v4"
+	"gopkg.in/src-d/go-git.v4/plumbing/object"
 )
 
 // HasChanges returns true if there's uncomitted or unstaged changes on the
@@ -61,7 +62,7 @@ func GetCurrentHash(rootDir string) (string, error) {
 }
 
 // TagVersion creates a version tag in Git
-func TagVersion(rootDir, tagName, message string) error {
+func TagVersion(rootDir, name, email, tagName, message string) error {
 	src, err := git.PlainOpen(rootDir)
 	if err != nil {
 		toolbox.PrintError("Could not open Git repo at %s: %v", rootDir, err)
@@ -73,7 +74,13 @@ func TagVersion(rootDir, tagName, message string) error {
 		toolbox.PrintError("Could not read the HEAD of %s: %v", rootDir, err)
 		return err
 	}
-	_, err = src.CreateTag(tagName, ref.Hash(), &git.CreateTagOptions{Message: message})
+	_, err = src.CreateTag(tagName, ref.Hash(), &git.CreateTagOptions{
+		Tagger: &object.Signature{
+			Name:  name,
+			Email: email,
+		},
+		Message: message,
+	})
 	if err != nil {
 		toolbox.PrintError("Could not create a tag in %s: %v", rootDir, err)
 		return err

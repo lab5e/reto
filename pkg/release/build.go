@@ -41,7 +41,12 @@ func Build(tagVersion bool) error {
 
 	// Tag the commit with the new version
 	if tagVersion {
-		if err := gitutil.TagVersion(ctx.Config.SourceRoot, fmt.Sprintf("v%s", ctx.Version), ctx.Name); err != nil {
+		if err := gitutil.TagVersion(
+			ctx.Config.SourceRoot,
+			ctx.Config.ComitterName,
+			ctx.Config.ComitterEmail,
+			fmt.Sprintf("v%s", ctx.Version),
+			ctx.Config.Name); err != nil {
 			return err
 		}
 	}

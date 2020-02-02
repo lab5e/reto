@@ -24,8 +24,8 @@ func (c *statusCommand) Run(rc RunContext) error {
 		return err
 	}
 
-	changelogErr := release.ChangelogComplete(false)
-	configErr := release.VerifyConfig(ctx.Config, false)
+	changelogErr := release.ChangelogComplete(rc.ReleaseCommands().Status.Verbose)
+	configErr := release.VerifyConfig(ctx.Config, rc.ReleaseCommands().Status.Verbose)
 
 	fmt.Printf("Configuration:       %s\n", okNotOK(configErr == nil))
 	fmt.Printf("Changelog            %s\n", okNotOK(changelogErr == nil))
