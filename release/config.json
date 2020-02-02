@@ -1,8 +1,8 @@
 {
     "sourceRoot": ".",
     "name": "reto",
-    "comitterName": "Reto release tool",
-    "comitterEmail": "ee@exploratory.engineering",
+    "committerName": "Reto release tool",
+    "committerEmail": "ee@exploratory.engineering",
     "targets": [
         "darwin-amd64",
         "linux-amd64",

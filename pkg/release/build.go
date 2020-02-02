@@ -13,7 +13,7 @@ import (
 )
 
 // Build builds a new release from the current setup
-func Build(tagVersion bool) error {
+func Build(tagVersion, commitNewRelease bool, overrideName, overrideEmail string) error {
 	ctx, err := GetContext()
 	if err != nil {
 		return err
@@ -27,6 +27,14 @@ func Build(tagVersion bool) error {
 	if err := ChangelogComplete(true); err != nil {
 		return err
 	}
+
+	if overrideName != "" {
+		ctx.Config.CommitterName = overrideName
+	}
+	if overrideEmail != "" {
+		ctx.Config.CommitterEmail = overrideEmail
+	}
+
 	if err := VerifyConfig(ctx.Config, true); err != nil {
 		return err
 	}
@@ -43,8 +51,8 @@ func Build(tagVersion bool) error {
 	if tagVersion {
 		if err := gitutil.TagVersion(
 			ctx.Config.SourceRoot,
-			ctx.Config.ComitterName,
-			ctx.Config.ComitterEmail,
+			ctx.Config.CommitterName,
+			ctx.Config.CommitterEmail,
 			fmt.Sprintf("v%s", ctx.Version),
 			ctx.Config.Name); err != nil {
 			return err
@@ -55,8 +63,8 @@ func Build(tagVersion bool) error {
 		return err
 	}
 
-	if err := os.Remove("release/changelog.md"); err != nil {
-		toolbox.PrintError("Could not remove released changelog in release/changelog.md: %v", err)
+	if err := os.Remove(WorkingChangelog); err != nil {
+		toolbox.PrintError("Could not remove released changelog in %s: %v", WorkingChangelog, err)
 		return err
 	}
 
@@ -84,6 +92,26 @@ func Build(tagVersion bool) error {
 
 	if err := generateChecksumFile(ctx, buf); err != nil {
 		return err
+	}
+
+	if commitNewRelease {
+		commitMessage := fmt.Sprintf(
+			`Release %s
+
+			Released version %s (%s)
+			`, ctx.Version, ctx.Version, ctx.Name)
+		hash, err := gitutil.CreateCommit(
+			ctx.Config.SourceRoot,
+			ctx.Config.CommitterName,
+			ctx.Config.CommitterEmail,
+			commitMessage,
+			WorkingChangelog,
+			fmt.Sprintf("release/%s/changelog.md", ctx.Version))
+		if err != nil {
+			toolbox.PrintError("Could not commit the new release files: %v", err)
+			return err
+		}
+		fmt.Printf("New change log is committed as %s\n", hash[:6])
 	}
 	return nil
 }

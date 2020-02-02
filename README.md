@@ -86,8 +86,8 @@ the following (the example is for the tool itself):
 {
     "sourceRoot": ".",
     "name": "reto",
-    "comitterName": "Reto release tool",
-    "comitterEmail": "reto@exploratory.engineering",
+    "committerName": "Reto release tool",
+    "committerEmail": "reto@exploratory.engineering",
     "targets": [
         "darwin-amd64", "linux-amd64", "windows-amd64", "linux-arm"
     ],
@@ -102,7 +102,7 @@ the following (the example is for the tool itself):
 ```
 
 * `name` is the name of the product.
-* `comitterName` and `comitterEmail` is the name and email used when tagging
+* `committerName` and `committerEmail` is the name and email used when tagging
   git releases.
 * `sourceRoot` points to the source code root. Usually you'd want the release
   files to reside next to the tool itself but if you want to put the release

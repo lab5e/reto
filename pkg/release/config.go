@@ -18,12 +18,12 @@ type File struct {
 
 // Config is the tool configuration
 type Config struct {
-	SourceRoot    string   `json:"sourceRoot"`
-	Name          string   `json:"name"`
-	ComitterEmail string   `json:"comitterEmail"`
-	ComitterName  string   `json:"comitterName"`
-	Targets       []string `json:"targets"`
-	Files         []File   `json:"files"`
+	SourceRoot     string   `json:"sourceRoot"`
+	Name           string   `json:"name"`
+	CommitterEmail string   `json:"committerEmail"`
+	CommitterName  string   `json:"committerName"`
+	Targets        []string `json:"targets"`
+	Files          []File   `json:"files"`
 }
 
 // ConfigPath is the path to the configuration file
@@ -53,11 +53,11 @@ func WriteSampleConfig() error {
 // sampleConfig is the sample configuration file.
 func sampleConfig() Config {
 	return Config{
-		SourceRoot:    ".",
-		Name:          "TODO set your product name",
-		ComitterName:  "TODO set name for git commits",
-		ComitterEmail: "TODO set email for git commits",
-		Targets:       []string{"TODO: set target (amd64-darwin, arm-linux, mips-plan9...)"},
+		SourceRoot:     ".",
+		Name:           "TODO set your product name",
+		CommitterName:  "TODO set name for git commits",
+		CommitterEmail: "TODO set email for git commits",
+		Targets:        []string{"TODO: set target (amd64-darwin, arm-linux, mips-plan9...)"},
 		Files: []File{
 			File{
 				ID:     "TODO: set ID for file",
@@ -89,11 +89,11 @@ func VerifyConfig(config Config, printErrors bool) error {
 	if err := toolbox.CheckForTODO(ConfigPath, true); err != nil {
 		return err
 	}
-	if len(config.ComitterEmail) == 0 || len(config.ComitterName) == 0 {
+	if len(config.CommitterEmail) == 0 || len(config.CommitterName) == 0 {
 		if printErrors {
-			toolbox.PrintError("Comitter email and name must be set")
+			toolbox.PrintError("Committer email and name must be set")
 		}
-		return errors.New("no comitter")
+		return errors.New("no committer")
 	}
 	if len(config.Targets) == 0 {
 		if printErrors {

@@ -87,3 +87,36 @@ func TagVersion(rootDir, name, email, tagName, message string) error {
 	}
 	return nil
 }
+
+// CreateCommit creates a new commit.
+func CreateCommit(rootDir, name, email, message string, files ...string) (string, error) {
+	src, err := git.PlainOpen(rootDir)
+	if err != nil {
+		toolbox.PrintError("Could not open Git repo at %s: %v", rootDir, err)
+		return "", err
+	}
+	tree, err := src.Worktree()
+	if err != nil {
+		toolbox.PrintError("Could not read the working tree for %s: %v", rootDir, err)
+		return "", err
+	}
+	for _, v := range files {
+		_, err := tree.Add(v)
+		if err != nil {
+			toolbox.PrintError("Could not add %s to the working tree: %v", v, err)
+			return "", err
+		}
+	}
+	hash, err := tree.Commit(message, &git.CommitOptions{
+		Author: &object.Signature{
+			Name:  name,
+			Email: email,
+		},
+		Committer: nil,
+	})
+	if err != nil {
+		toolbox.PrintError("Could not commit to the working tree: %v", err)
+		return "", err
+	}
+	return hash.String(), nil
+}

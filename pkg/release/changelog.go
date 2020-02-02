@@ -83,7 +83,7 @@ func initChangelog() error {
 
 // Expand the template vars in the working copy of the changelog.
 func releaseChangelog(ctx *Context) error {
-	buf, err := ioutil.ReadFile("release/changelog.md")
+	buf, err := ioutil.ReadFile(WorkingChangelog)
 	if err != nil {
 		toolbox.PrintError("Could not open working copy of changelog: %v", err)
 		return err
