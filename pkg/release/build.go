@@ -8,11 +8,12 @@ import (
 	"os"
 	"time"
 
+	"github.com/ExploratoryEngineering/reto/pkg/gitutil"
 	"github.com/ExploratoryEngineering/reto/pkg/toolbox"
 )
 
 // Build builds a new release from the current setup
-func Build() error {
+func Build(tagVersion bool) error {
 	ctx, err := GetContext()
 	if err != nil {
 		return err
@@ -23,15 +24,26 @@ func Build() error {
 	}
 
 	// Do a quick sanity check on the change log
-	if err := ChangelogComplete(); err != nil {
+	if err := ChangelogComplete(true); err != nil {
 		return err
 	}
-	if err := VerifyConfig(ctx.Config); err != nil {
+	if err := VerifyConfig(ctx.Config, true); err != nil {
 		return err
+	}
+	if gitutil.HasChanges(ctx.Config.SourceRoot) {
+		toolbox.PrintError("There are uncommitted or unstaged changes in the current Git branch")
+		return errors.New("uncommitted changes")
 	}
 	if err := os.Mkdir(fmt.Sprintf("release/%s", ctx.Version), toolbox.DefaultFilePerm); err != nil {
 		toolbox.PrintError("Could not create release directory: %v", err)
 		return err
+	}
+
+	// Tag the commit with the new version
+	if tagVersion {
+		if err := gitutil.TagVersion(ctx.Config.SourceRoot, fmt.Sprintf("v%s", ctx.Version), ctx.Name); err != nil {
+			return err
+		}
 	}
 
 	if err := releaseChangelog(ctx); err != nil {

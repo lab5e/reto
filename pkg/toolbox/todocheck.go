@@ -8,7 +8,7 @@ import (
 
 // Check if the string TODO is somewhere in a file. Prints the line number
 // and file name if so.
-func CheckForTODO(file string) error {
+func CheckForTODO(file string, printErrors bool) error {
 	buf, err := ioutil.ReadFile(file)
 	if err != nil {
 		PrintError("Could not read %s: %v", file, err)
@@ -19,7 +19,9 @@ func CheckForTODO(file string) error {
 	todos := 0
 	for i, v := range lines {
 		if strings.Index(v, "TODO") > 0 {
-			PrintError("%s: TODO statement on line %d", file, i+1)
+			if printErrors {
+				PrintError("%s: TODO statement on line %d", file, i+1)
+			}
 			todos++
 		}
 	}

@@ -81,16 +81,20 @@ func readConfig() (Config, error) {
 const anyTarget = "-"
 
 // VerifyConfig verifies that the artifact config is correct
-func VerifyConfig(config Config) error {
-	if err := toolbox.CheckForTODO(ConfigPath); err != nil {
+func VerifyConfig(config Config, printErrors bool) error {
+	if err := toolbox.CheckForTODO(ConfigPath, true); err != nil {
 		return err
 	}
 	if len(config.Targets) == 0 {
-		toolbox.PrintError("There are no targets in the configuration file")
+		if printErrors {
+			toolbox.PrintError("There are no targets in the configuration file")
+		}
 		return errors.New("no targets")
 	}
 	if len(config.Files) == 0 {
-		toolbox.PrintError("There are no output files in the configuration file")
+		if printErrors {
+			toolbox.PrintError("There are no output files in the configuration file")
+		}
 		return errors.New("no targets")
 	}
 
@@ -122,14 +126,18 @@ func VerifyConfig(config Config) error {
 			}
 			_, ok := targets[target]
 			if !ok {
-				toolbox.PrintError("File with ID '%s' have unknown target %s", id, target)
+				if printErrors {
+					toolbox.PrintError("File with ID '%s' have unknown target %s", id, target)
+				}
 				errs++
 			}
 			delete(targets, target)
 		}
 		if len(targets) > 0 {
 			for target := range targets {
-				toolbox.PrintError("File with ID '%s' is missing target %s", id, target)
+				if printErrors {
+					toolbox.PrintError("File with ID '%s' is missing target %s", id, target)
+				}
 				errs++
 			}
 		}
@@ -141,7 +149,9 @@ func VerifyConfig(config Config) error {
 	for _, file := range config.Files {
 		if _, err := os.Stat(file.Name); err != nil {
 			if os.IsNotExist(err) {
-				toolbox.PrintError("The file %s does not exist", file.Name)
+				if printErrors {
+					toolbox.PrintError("The file %s does not exist", file.Name)
+				}
 				return err
 			}
 			toolbox.PrintError("Could not access %s: %v", file.Name, err)

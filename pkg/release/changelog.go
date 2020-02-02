@@ -43,8 +43,8 @@ const WorkingChangelog = "release/changelog.md"
 // ChangelogComplete verifies that there's no TODO statements in the change log
 // It will print an error message on stderr witht the line number and return an error
 // if one or more TODO strings are found. It's simple but for a reason :)
-func ChangelogComplete() error {
-	return toolbox.CheckForTODO(WorkingChangelog)
+func ChangelogComplete(printErrors bool) error {
+	return toolbox.CheckForTODO(WorkingChangelog, printErrors)
 }
 
 // MakeTemplate creates the changelog template file
