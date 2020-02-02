@@ -9,6 +9,7 @@ import (
 
 const (
 	initialVersion = "0.0.0"
+	archiveDir     = "release/archives"
 )
 
 // InitTool initializes the directory structure for the tool. Errors are printed
@@ -60,7 +61,6 @@ func InitTool() error {
 		return err
 	}
 
-	archiveDir := "release/archives"
 	if err := os.Mkdir(archiveDir, toolbox.DefaultFilePerm); err != nil {
 		toolbox.PrintError("Could not create the archives directory: %v", err)
 		return err

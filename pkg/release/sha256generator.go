@@ -21,8 +21,12 @@ func GenerateSHA256File(ctx *Context) error {
 	return generateChecksumFile(ctx, nil)
 }
 
+func checksumFileName(name, version string) string {
+	return fmt.Sprintf("%s/%s/sha256sum_%s_%s.txt", archiveDir, version, name, version)
+}
+
 func generateChecksumFile(ctx *Context, changelogBuf []byte) error {
-	checksumFilename := fmt.Sprintf("release/archives/%s/sha256sum_%s_%s.txt", ctx.Version, ctx.Config.Name, ctx.Version)
+	checksumFilename := checksumFileName(ctx.Config.Name, ctx.Version)
 	f, err := os.Create(checksumFilename)
 	if err != nil {
 		toolbox.PrintError("Could not create the checksum file %s: %v", checksumFilename, err)

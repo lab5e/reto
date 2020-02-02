@@ -9,7 +9,8 @@ import (
 )
 
 type statusCommand struct {
-	Verbose bool `kong:"short='V',help='Verbose output'"`
+	Verbose    bool `kong:"short='V',help='Verbose output'"`
+	NoBinCheck bool `kong:"short='c',help='Skip change check on release files'"`
 }
 
 func okNotOK(v bool) string {
@@ -27,17 +28,20 @@ func (c *statusCommand) Run(rc RunContext) error {
 
 	changelogErr := release.ChangelogComplete(rc.ReleaseCommands().Status.Verbose)
 	configErr := release.VerifyConfig(ctx.Config, rc.ReleaseCommands().Status.Verbose)
+	changedFiles := release.NewFileVersions(ctx.Config)
+	gitChanges := !gitutil.HasChanges(ctx.Config.SourceRoot)
 
 	fmt.Printf("Configuration:       %s\n", okNotOK(configErr == nil))
 	fmt.Printf("Changelog            %s\n", okNotOK(changelogErr == nil))
 	fmt.Printf("Version number:      %s\n", okNotOK(!ctx.Released))
-	fmt.Printf("Uncommitted changes: %s\n", okNotOK(!gitutil.HasChanges(ctx.Config.SourceRoot)))
+	fmt.Printf("Uncommitted changes: %s\n", okNotOK(gitChanges))
+	fmt.Printf("Changed binaries:    %s\n", okNotOK(changedFiles))
 	fmt.Println()
 	fmt.Printf("Active version:      %s\n", ctx.Version)
 	fmt.Printf("Commit Hash:         %s\n", ctx.CommitHash)
 	fmt.Printf("Name:                %s\n", ctx.Name)
 
-	readyToRelease := configErr == nil && changelogErr == nil && !gitutil.HasChanges(ctx.Config.SourceRoot)
+	readyToRelease := configErr == nil && changelogErr == nil && gitChanges && changedFiles
 
 	if rc.ReleaseCommands().Status.Verbose {
 		fmt.Println()
@@ -55,7 +59,7 @@ func (c *statusCommand) Run(rc RunContext) error {
 
 	if readyToRelease {
 		fmt.Println()
-		fmt.Println("Ready to release. Remember to build the release binaries first!")
+		fmt.Println("Ready to release.")
 		return nil
 	}
 

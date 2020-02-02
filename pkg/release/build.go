@@ -42,6 +42,11 @@ func Build(tagVersion, commitNewRelease bool, overrideName, overrideEmail string
 		toolbox.PrintError("There are uncommitted or unstaged changes in the current Git branch")
 		return errors.New("uncommitted changes")
 	}
+
+	if !NewFileVersions(ctx.Config) {
+		return errors.New("no file changes")
+	}
+
 	if err := os.Mkdir(fmt.Sprintf("release/%s", ctx.Version), toolbox.DefaultFilePerm); err != nil {
 		toolbox.PrintError("Could not create release directory: %v", err)
 		return err
