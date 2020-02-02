@@ -1,6 +1,7 @@
 package commands
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/ExploratoryEngineering/reto/pkg/gitutil"
@@ -36,6 +37,8 @@ func (c *statusCommand) Run(rc RunContext) error {
 	fmt.Printf("Commit Hash:         %s\n", ctx.CommitHash)
 	fmt.Printf("Name:                %s\n", ctx.Name)
 
+	readyToRelease := configErr == nil && changelogErr == nil && !gitutil.HasChanges(ctx.Config.SourceRoot)
+
 	if rc.ReleaseCommands().Status.Verbose {
 		fmt.Println()
 		fmt.Println("Configuration:")
@@ -49,5 +52,12 @@ func (c *statusCommand) Run(rc RunContext) error {
 		}
 		fmt.Println()
 	}
-	return nil
+
+	if readyToRelease {
+		fmt.Println()
+		fmt.Println("Ready to release. Remember to build the release binaries first!")
+		return nil
+	}
+
+	return errors.New("notready")
 }
