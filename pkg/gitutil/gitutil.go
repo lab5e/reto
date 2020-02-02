@@ -2,6 +2,7 @@ package gitutil
 
 import (
 	"errors"
+	"time"
 
 	"github.com/ExploratoryEngineering/reto/pkg/toolbox"
 
@@ -111,6 +112,7 @@ func CreateCommit(rootDir, name, email, message string, files ...string) (string
 		Author: &object.Signature{
 			Name:  name,
 			Email: email,
+			When:  time.Now(),
 		},
 		Committer: nil,
 	})
