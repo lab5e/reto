@@ -13,19 +13,11 @@ import (
 	"github.com/ExploratoryEngineering/reto/pkg/toolbox"
 )
 
-// GenerateSHA256File generates a text file with SHA256 checksums for the files
-// in the release
-func GenerateSHA256File(ctx *Context) error {
-	fmt.Println("Generating SHA256 checksums...")
-
-	return generateChecksumFile(ctx, nil)
-}
-
 func checksumFileName(name, version string) string {
 	return fmt.Sprintf("%s/%s/sha256sum_%s_%s.txt", archiveDir, version, name, version)
 }
 
-func generateChecksumFile(ctx *Context, changelogBuf []byte) error {
+func generateChecksumFile(ctx *Context, files []string) error {
 	checksumFilename := checksumFileName(ctx.Config.Name, ctx.Version)
 	f, err := os.Create(checksumFilename)
 	if err != nil {
@@ -34,21 +26,15 @@ func generateChecksumFile(ctx *Context, changelogBuf []byte) error {
 	}
 	defer f.Close()
 
-	// Generate checksum for changelogBuf
-	if changelogBuf != nil {
-		csum := fmt.Sprintf("%x  changelog.md\n", sha256.Sum256(changelogBuf))
-		fmt.Print(csum)
-		f.Write([]byte(csum))
-	}
-	for _, v := range ctx.Config.Files {
-		buf, err := ioutil.ReadFile(v.Name)
+	for _, v := range files {
+		buf, err := ioutil.ReadFile(v)
 		if err != nil {
-			toolbox.PrintError("Unable to read %s: %v", v.Name, err)
+			toolbox.PrintError("Unable to read %s: %v", v, err)
 			return err
 		}
 		sum := sha256.Sum256(buf)
 
-		line := fmt.Sprintf("%x  %s\n", sum, filepath.Base(v.Name))
+		line := fmt.Sprintf("%x  %s\n", sum, filepath.Base(v))
 		fmt.Print(line)
 		if _, err := f.Write([]byte(line)); err != nil {
 			toolbox.PrintError("Could not write checksum to %s: %v", checksumFilename, err)

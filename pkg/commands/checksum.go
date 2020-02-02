@@ -1,16 +1,18 @@
 package commands
 
-import "github.com/ExploratoryEngineering/reto/pkg/release"
+import (
+	"errors"
+
+	"github.com/ExploratoryEngineering/reto/pkg/release"
+	"github.com/ExploratoryEngineering/reto/pkg/toolbox"
+)
 
 type checksumCommand struct {
 }
 
 func (c *checksumCommand) Run(rc RunContext) error {
-	ctx, err := release.GetContext()
-	if err != nil {
-		return err
-	}
-	return release.GenerateSHA256File(ctx)
+	toolbox.PrintError("not implemented")
+	return errors.New("not implemented")
 }
 
 type verifyCommand struct {

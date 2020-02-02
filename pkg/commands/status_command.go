@@ -26,13 +26,13 @@ func (c *statusCommand) Run(rc RunContext) error {
 		return err
 	}
 
-	changelogErr := release.ChangelogComplete(rc.ReleaseCommands().Status.Verbose)
+	templateErr := release.TemplatesComplete(ctx, rc.ReleaseCommands().Status.Verbose)
 	configErr := release.VerifyConfig(ctx.Config, rc.ReleaseCommands().Status.Verbose)
 	changedFiles := release.NewFileVersions(ctx.Config, rc.ReleaseCommands().Status.Verbose)
 	gitChanges := !gitutil.HasChanges(ctx.Config.SourceRoot)
 
 	fmt.Printf("Configuration:       %s\n", okNotOK(configErr == nil))
-	fmt.Printf("Changelog            %s\n", okNotOK(changelogErr == nil))
+	fmt.Printf("Working templates:   %s\n", okNotOK(templateErr == nil))
 	fmt.Printf("Version number:      %s\n", okNotOK(!ctx.Released))
 	fmt.Printf("Uncommitted changes: %s\n", okNotOK(gitChanges))
 	fmt.Printf("Changed binaries:    %s\n", okNotOK(changedFiles))
@@ -41,7 +41,7 @@ func (c *statusCommand) Run(rc RunContext) error {
 	fmt.Printf("Commit Hash:         %s\n", ctx.CommitHash)
 	fmt.Printf("Name:                %s\n", ctx.Name)
 
-	readyToRelease := configErr == nil && changelogErr == nil && gitChanges && changedFiles
+	readyToRelease := configErr == nil && templateErr == nil && gitChanges && changedFiles
 
 	if rc.ReleaseCommands().Status.Verbose {
 		fmt.Println()

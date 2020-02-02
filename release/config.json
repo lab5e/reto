@@ -9,6 +9,16 @@
         "windows-amd64",
         "linux-arm"
     ],
+    "templates": [
+        {
+            "name": "changelog.md",
+            "action": "aggregate"
+        },
+        {
+            "name": "update.sql",
+            "action": "include"
+        }
+    ],
     "files": [
         {
             "id": "tool",

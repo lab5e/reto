@@ -16,14 +16,32 @@ type File struct {
 	Target string `json:"target"`
 }
 
+// Actions on templates
+const (
+	// IncludeAction means that the file will be included in the archive
+	// without any other actions
+	IncludeAction = "include"
+	// ConcatenateAction will concatenate across all previous releases into
+	// one big file before it is included in the archive.
+	ConcatenateAction = "concatenate"
+)
+
+// Templates are template files that are included in the release archive. They
+// are Go templates
+type Template struct {
+	Name           string `json:"name"`
+	TemplateAction string `json:"action"`
+}
+
 // Config is the tool configuration
 type Config struct {
-	SourceRoot     string   `json:"sourceRoot"`
-	Name           string   `json:"name"`
-	CommitterEmail string   `json:"committerEmail"`
-	CommitterName  string   `json:"committerName"`
-	Targets        []string `json:"targets"`
-	Files          []File   `json:"files"`
+	SourceRoot     string     `json:"sourceRoot"`
+	Name           string     `json:"name"`
+	CommitterEmail string     `json:"committerEmail"`
+	CommitterName  string     `json:"committerName"`
+	Targets        []string   `json:"targets"`
+	Files          []File     `json:"files"`
+	Templates      []Template `json:"templates"`
 }
 
 // ConfigPath is the path to the configuration file
@@ -37,7 +55,7 @@ func WriteSampleConfig() error {
 		return err
 	}
 
-	c := sampleConfig()
+	c := defaultConfig()
 	buf, err := json.MarshalIndent(&c, "", "  ")
 	if err != nil {
 		panic(err)
@@ -51,13 +69,17 @@ func WriteSampleConfig() error {
 }
 
 // sampleConfig is the sample configuration file.
-func sampleConfig() Config {
+func defaultConfig() Config {
 	return Config{
 		SourceRoot:     ".",
 		Name:           "TODO set your product name",
 		CommitterName:  "TODO set name for git commits",
 		CommitterEmail: "TODO set email for git commits",
 		Targets:        []string{"TODO: set target (amd64-darwin, arm-linux, mips-plan9...)"},
+		Templates: []Template{Template{
+			Name:           "changelog.md",
+			TemplateAction: ConcatenateAction,
+		}},
 		Files: []File{
 			File{
 				ID:     "TODO: set ID for file",
