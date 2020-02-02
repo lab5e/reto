@@ -10,19 +10,25 @@ import (
 const (
 	initialVersion = "0.0.0"
 	archiveDir     = "release/archives"
+	releaseDir     = "release/releases"
+	templateDir    = "release/templates"
 )
 
 // InitTool initializes the directory structure for the tool. Errors are printed
 // to stderr.
 func InitTool() error {
 	// Make sure the release directory doesn't exist
-	err := os.Mkdir("release", toolbox.DefaultDirPerm)
-	if os.IsExist(err) {
-		toolbox.PrintError("The 'release' directory already exists.")
-		return err
-	}
+	err := os.MkdirAll(releaseDir, toolbox.DefaultDirPerm)
 	if err != nil {
 		toolbox.PrintError("Error creating the release directory: %v", err)
+		return err
+	}
+	if err := os.MkdirAll(templateDir, toolbox.DefaultDirPerm); err != nil {
+		toolbox.PrintError("Could not create the template directory: %v", err)
+		return err
+	}
+	if err := os.MkdirAll(archiveDir, toolbox.DefaultDirPerm); err != nil {
+		toolbox.PrintError("Could not create the archive directory: %v", err)
 		return err
 	}
 
@@ -46,23 +52,11 @@ func InitTool() error {
 		return err
 	}
 
-	templateDir := "release/templates"
-
-	if err := os.Mkdir(templateDir, toolbox.DefaultDirPerm); err != nil {
-		toolbox.PrintError("Could not create the template directory: %v", err)
-		return err
-	}
-
 	if err := initSampleTemplates(); err != nil {
 		return err
 	}
 
 	if err := WriteSampleConfig(); err != nil {
-		return err
-	}
-
-	if err := os.Mkdir(archiveDir, toolbox.DefaultDirPerm); err != nil {
-		toolbox.PrintError("Could not create the archives directory: %v", err)
 		return err
 	}
 

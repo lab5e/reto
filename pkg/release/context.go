@@ -75,7 +75,7 @@ func GetContext() (*Context, error) {
 	}
 	ret.Patch = int(v)
 
-	_, err = os.Stat(fmt.Sprintf("release/%s", ret.Version))
+	_, err = os.Stat(fmt.Sprintf("%s/%s", releaseDir, ret.Version))
 	ret.Released = true
 	if os.IsNotExist(err) {
 		ret.Released = false

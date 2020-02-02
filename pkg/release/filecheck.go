@@ -36,7 +36,7 @@ func NewFileVersions(config Config, printErrors bool) bool {
 	// Look in releases for the previous version
 	var releasedVersions []string
 
-	fileinfos, err := ioutil.ReadDir("release")
+	fileinfos, err := ioutil.ReadDir(releaseDir)
 	if err != nil {
 		toolbox.PrintError("Could not read release directory: %v", err)
 		return false

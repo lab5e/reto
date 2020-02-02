@@ -89,7 +89,7 @@ func mergeTemplate(source string, dest string, ctx *Context) error {
 func concatenateTemplate(basename string, destination string) error {
 	fmt.Printf("Merging %s...\n", basename)
 
-	fileinfos, err := ioutil.ReadDir("release")
+	fileinfos, err := ioutil.ReadDir(releaseDir)
 	if err != nil {
 		toolbox.PrintError("Could not read release directory: %v", err)
 		return err
@@ -97,9 +97,9 @@ func concatenateTemplate(basename string, destination string) error {
 
 	inputs := make([]string, 0)
 	for _, fi := range fileinfos {
-		changelogPath := fmt.Sprintf("release/%s/%s", fi.Name(), basename)
-		if fi.IsDir() && toolbox.IsFile(changelogPath) {
-			inputs = append(inputs, changelogPath)
+		templatePath := fmt.Sprintf("%s/%s/%s", releaseDir, fi.Name(), basename)
+		if fi.IsDir() && toolbox.IsFile(templatePath) {
+			inputs = append(inputs, templatePath)
 		}
 	}
 	sort.Strings(inputs)

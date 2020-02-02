@@ -47,12 +47,12 @@ func Build(tagVersion, commitNewRelease bool, overrideName, overrideEmail string
 		return errors.New("no file changes")
 	}
 
-	if err := os.Mkdir(fmt.Sprintf("release/%s", ctx.Version), toolbox.DefaultDirPerm); err != nil {
+	if err := os.Mkdir(fmt.Sprintf("%s/%s", releaseDir, ctx.Version), toolbox.DefaultDirPerm); err != nil {
 		toolbox.PrintError("Could not create release directory: %v", err)
 		return err
 	}
 
-	archivePath := fmt.Sprintf("release/archives/%s", ctx.Version)
+	archivePath := fmt.Sprintf("%s/%s", archiveDir, ctx.Version)
 	if err := os.Mkdir(archivePath, toolbox.DefaultDirPerm); err != nil {
 		toolbox.PrintError("Unable to create archive directory %s: %v", archivePath, err)
 		return err
@@ -62,8 +62,8 @@ func Build(tagVersion, commitNewRelease bool, overrideName, overrideEmail string
 	var tempFiles []string     // temp files that should be deleted when done
 	for _, template := range ctx.Config.Templates {
 		workingCopy := fmt.Sprintf("release/%s", template.Name)
-		releasedCopy := fmt.Sprintf("release/%s/%s", ctx.Version, template.Name)
-		archiveCopy := fmt.Sprintf("release/archives/%s/%s", ctx.Version, template.Name)
+		releasedCopy := fmt.Sprintf("%s/%s/%s", releaseDir, ctx.Version, template.Name)
+		archiveCopy := fmt.Sprintf("%s/%s/%s", archiveDir, ctx.Version, template.Name)
 		if err := mergeTemplate(workingCopy, releasedCopy, ctx); err != nil {
 			return err
 		}
@@ -126,7 +126,7 @@ func Build(tagVersion, commitNewRelease bool, overrideName, overrideEmail string
 			`, ctx.Version, ctx.Version, ctx.Name)
 		var filesToCommit []string
 		for _, v := range ctx.Config.Templates {
-			filesToCommit = append(filesToCommit, fmt.Sprintf("release/%s/%s", ctx.Version, filepath.Base(v.Name)))
+			filesToCommit = append(filesToCommit, fmt.Sprintf("%s/%s/%s", releaseDir, ctx.Version, filepath.Base(v.Name)))
 			filesToCommit = append(filesToCommit, fmt.Sprintf("release/%s", filepath.Base(v.Name)))
 		}
 		hash, err := gitutil.CreateCommit(
