@@ -12,8 +12,7 @@ import (
 )
 
 // DefaultChangeLogTemplate is the default template for the changelog
-var DefaultChangeLogTemplate = `
-## v{{ .Version }}: {{ .Name }}
+var DefaultChangeLogTemplate = `## v{{ .Version }}: {{ .Name }}
 
 ### Features
 
