@@ -71,7 +71,7 @@ func Build(tagVersion, commitNewRelease bool, overrideName, overrideEmail string
 			toolbox.PrintError("Could not remove template %s: %v", template, err)
 			return err
 		}
-		if err := toolbox.CopyFile(fmt.Sprintf("%s/%s", TemplatePath, template.Name), workingCopy); err != nil {
+		if err := toolbox.CopyFile(fmt.Sprintf("%s/%s", templateDir, template.Name), workingCopy); err != nil {
 			toolbox.PrintError("Could not copy %s to release directory: %v", workingCopy, err)
 			return err
 		}

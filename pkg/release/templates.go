@@ -33,9 +33,6 @@ var sampleChangelog = `## v{{ .Version }}: {{ .Name }}
 Commit hash: {{ .CommitHash }}
 `
 
-// TemplatePath is the path to the changelog template
-const TemplatePath = "release/templates"
-
 // TemplatesComplete verifies that there's no TODO statements in the change log
 // It will print an error message on stderr witht the line number and return an error
 // if one or more TODO strings are found. It's simple but for a reason :)
@@ -105,7 +102,6 @@ func concatenateTemplate(basename string, destination string) error {
 	sort.Strings(inputs)
 	var buffer []byte
 	for i := len(inputs) - 1; i >= 0; i-- {
-		buffer = append(buffer, []byte("\n\n")...)
 		buf, err := ioutil.ReadFile(inputs[i])
 		if err != nil {
 			toolbox.PrintError("Could not read changelog at %s: %v", inputs[i], err)
@@ -113,8 +109,6 @@ func concatenateTemplate(basename string, destination string) error {
 		}
 		buffer = append(buffer, buf...)
 	}
-	buffer = append(buffer, byte('\n'))
-
 	fmt.Printf("%d files merged\n", len(inputs))
 	if err := ioutil.WriteFile(destination, buffer, toolbox.DefaultFilePerm); err != nil {
 		toolbox.PrintError("Error writing %s: %v", destination, err)
