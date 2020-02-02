@@ -54,7 +54,7 @@ func Build(tagVersion, commitNewRelease bool, overrideName, overrideEmail string
 			ctx.Config.CommitterName,
 			ctx.Config.CommitterEmail,
 			fmt.Sprintf("v%s", ctx.Version),
-			ctx.Name); err != nil {
+			fmt.Sprintf("Release v%s (%s)", ctx.Version, ctx.Name)); err != nil {
 			return err
 		}
 	}

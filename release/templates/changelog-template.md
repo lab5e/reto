@@ -1,4 +1,3 @@
-
 ## Changelog {{ .Version }}: {{ .Name }}
 
 ### Features
