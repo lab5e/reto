@@ -58,40 +58,41 @@ func Build(tagVersion, commitNewRelease bool, overrideName, overrideEmail string
 		return err
 	}
 
-	var tempFiles []string
+	var checksumFiles []string // Files that should be checksummed
+	var tempFiles []string     // temp files that should be deleted when done
 	for _, template := range ctx.Config.Templates {
-		workingCopy := fmt.Sprintf("release/%s", filepath.Base(template.Name))
-		releasedCopy := fmt.Sprintf("release/%s/%s", ctx.Version, filepath.Base(template.Name))
-		archiveCopy := fmt.Sprintf("release/archives/%s/%s", ctx.Version, filepath.Base(template.Name))
+		workingCopy := fmt.Sprintf("release/%s", template.Name)
+		releasedCopy := fmt.Sprintf("release/%s/%s", ctx.Version, template.Name)
+		archiveCopy := fmt.Sprintf("release/archives/%s/%s", ctx.Version, template.Name)
 		if err := mergeTemplate(workingCopy, releasedCopy, ctx); err != nil {
 			return err
-		}
-		if template.TemplateAction == ConcatenateAction {
-			if err := concatenateTemplate(filepath.Base(template.Name), archiveCopy); err != nil {
-				return err
-			}
-			tempFiles = append(tempFiles, archiveCopy)
 		}
 		if err := os.Remove(workingCopy); err != nil {
 			toolbox.PrintError("Could not remove template %s: %v", template, err)
 			return err
 		}
-		if err := toolbox.CopyFile(workingCopy, releasedCopy); err != nil {
+		if err := toolbox.CopyFile(fmt.Sprintf("%s/%s", TemplatePath, template.Name), workingCopy); err != nil {
 			toolbox.PrintError("Could not copy %s to release directory: %v", workingCopy, err)
 			return err
 		}
+		if template.TemplateAction == ConcatenateAction {
+			if err := concatenateTemplate(template.Name, archiveCopy); err != nil {
+				return err
+			}
+			tempFiles = append(tempFiles, archiveCopy)
+			checksumFiles = append(checksumFiles, archiveCopy)
+		} else {
+			checksumFiles = append(checksumFiles, releasedCopy)
+		}
 	}
-
 	for _, target := range ctx.Config.Targets {
-		if err := buildRelease(ctx, target, archivePath, tempFiles); err != nil {
+		if err := buildRelease(ctx, target, archivePath, checksumFiles); err != nil {
 			return err
 		}
 	}
 
-	var checksumFiles []string
-	checksumFiles = append(checksumFiles, tempFiles...)
 	for _, file := range ctx.Config.Files {
-		tempFiles = append(checksumFiles, file.Name)
+		checksumFiles = append(checksumFiles, file.Name)
 	}
 	if err := generateChecksumFile(ctx, checksumFiles); err != nil {
 		return err

@@ -1,19 +1,8 @@
 package commands
 
 import (
-	"errors"
-
 	"github.com/ExploratoryEngineering/reto/pkg/release"
-	"github.com/ExploratoryEngineering/reto/pkg/toolbox"
 )
-
-type checksumCommand struct {
-}
-
-func (c *checksumCommand) Run(rc RunContext) error {
-	toolbox.PrintError("not implemented")
-	return errors.New("not implemented")
-}
 
 type verifyCommand struct {
 	Archive    string `kong:"required,help='Zip archive to verify',type='existingfile'"`

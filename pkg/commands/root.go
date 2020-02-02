@@ -12,8 +12,8 @@ type Root struct {
 	Namehash nameHashCommand `kong:"cmd,help='Display human readable name as git hash'"`
 	Status   statusCommand   `kong:"cmd,help='Display current status'"`
 	Release  releaseCommand  `kong:"cmd,help='Generate a release from existing binaries'"`
-	Checksum checksumCommand `kong:"cmd,help='Show checksum for built files'"`
 	Verify   verifyCommand   `kong:"cmd,help='Verify checksum on archive and files inside archive'"`
+	// Next up: purge (to remove old releases)
 }
 
 // ReleaseCommands is the command parameters

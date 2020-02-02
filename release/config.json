@@ -12,11 +12,15 @@
     "templates": [
         {
             "name": "changelog.md",
-            "action": "aggregate"
+            "action": "concatenate"
         },
         {
-            "name": "update.sql",
+            "name": "verify.txt",
             "action": "include"
+        },
+        {
+            "name": "releases.txt",
+            "action": "concatenate"
         }
     ],
     "files": [
