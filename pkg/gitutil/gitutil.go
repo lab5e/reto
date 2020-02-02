@@ -79,6 +79,7 @@ func TagVersion(rootDir, name, email, tagName, message string) error {
 		Tagger: &object.Signature{
 			Name:  name,
 			Email: email,
+			When:  time.Now(),
 		},
 		Message: message,
 	})
