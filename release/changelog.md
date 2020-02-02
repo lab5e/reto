@@ -11,3 +11,5 @@ Tag the version when making a release. This ensures that the version name is
 consistent. The tag is created before the changelog is moved so the current
 version is in `release/VERSION` and the current changelog will be in
 `release/changelog.md`.
+
+Updated status command with -V flag to show verbose output.

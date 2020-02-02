@@ -34,6 +34,7 @@ func (c *statusCommand) Run(rc RunContext) error {
 	fmt.Println()
 	fmt.Printf("Active version:      %s\n", ctx.Version)
 	fmt.Printf("Commit Hash:         %s\n", ctx.CommitHash)
+	fmt.Printf("Name:                %s\n", ctx.Name)
 
 	if rc.ReleaseCommands().Status.Verbose {
 		fmt.Println()
