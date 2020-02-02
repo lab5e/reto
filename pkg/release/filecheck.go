@@ -49,8 +49,8 @@ func NewFileVersions(config Config, printErrors bool) bool {
 		}
 	}
 	if len(releasedVersions) == 0 {
-		fmt.Println("Found no old versions")
-		return false
+		fmt.Println("Note: Found no old versions")
+		return true
 	}
 	sort.Strings(releasedVersions)
 
