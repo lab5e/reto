@@ -2,8 +2,8 @@
 
 ## Installing
 
-Install by running `go install -u https://github.com/ExploratoryEngineering/reto` if you
-have Go installed.
+Install by running `go get -u github.com/ExploratoryEngineering/reto/cmd/reto` or
+download the binaries from the release page.
 
 ## About
 
