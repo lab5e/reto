@@ -85,14 +85,15 @@ func GetContext() (*Context, error) {
 		return nil, err
 	}
 
+	ret.Config, err = readConfig()
+	if err != nil {
+		return nil, err
+	}
+
 	ret.CommitHash, err = gitutil.GetCurrentHash(ret.Config.SourceRoot)
 	if err != nil {
 		return nil, err
 	}
 	ret.Name = hashname.HashToName(ret.CommitHash)
-	ret.Config, err = readConfig()
-	if err != nil {
-		return nil, err
-	}
 	return &ret, nil
 }
