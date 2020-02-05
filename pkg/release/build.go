@@ -155,7 +155,14 @@ func Build(tagVersion, commitNewRelease bool, overrideName, overrideEmail string
 			return err
 		}
 		fmt.Printf("New change log is committed as %s\n", hash[:6])
+		newCtx, err := BumpVersion(false, false, true)
+		if err != nil {
+			toolbox.PrintError("Could not autobump version: %v", err)
+			return nil
+		}
+		fmt.Printf("auto-bumped new version to %s\n", newCtx.Version)
 	}
+
 	return nil
 }
 
