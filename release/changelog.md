@@ -1,8 +1,17 @@
+## Changelog {{ .Version }}: {{ .Name }}
+
+### Features
+
+[TODO: Write new features]
+
+### API
+
+[TODO: Changes to the API]
+
 ### Command line
 
-Removed committer email and name from config and parameters
+[TODO: Command line changes]
 
 ### Other
 
-Internal: Using git command line tools rather than library. Note that the
-git environment must be set up when the tool is used.
+[TODO: Write other changes here]
