@@ -46,7 +46,7 @@ func Build(tagVersion, commitNewRelease bool) error {
 	if err := VerifyConfig(ctx.Config, true); err != nil {
 		return err
 	}
-	if gitutil.HasChanges(ctx.Config.SourceRoot) {
+	if gitutil.HasChanges(ctx.Config.SourceRoot, true) {
 		toolbox.PrintError("There are uncommitted or unstaged changes in the current Git branch")
 		return errors.New("uncommitted changes")
 	}

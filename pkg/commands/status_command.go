@@ -33,7 +33,7 @@ func (c *statusCommand) Run(rc RunContext) error {
 	fmt.Println("Checking old releases")
 	changedFiles := release.NewFileVersions(ctx.Config, rc.ReleaseCommands().Status.Verbose)
 	fmt.Println("Checking SCM")
-	gitChanges := !gitutil.HasChanges(ctx.Config.SourceRoot)
+	gitChanges := !gitutil.HasChanges(ctx.Config.SourceRoot, rc.ReleaseCommands().Status.Verbose)
 
 	fmt.Println()
 	fmt.Printf("Configuration:       %s\n", okNotOK(configErr == nil))

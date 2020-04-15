@@ -12,7 +12,7 @@ import (
 // current branch.
 // Using the regular git command here since the Worktree() and Status() methods
 // are *really* slow on even medium-sized repositories.
-func HasChanges(rootDir string) bool {
+func HasChanges(rootDir string, verbose bool) bool {
 	cmd := exec.Command("git", "-C", rootDir, "status", "--porcelain")
 	var out bytes.Buffer
 	cmd.Stdout = &out
@@ -22,13 +22,20 @@ func HasChanges(rootDir string) bool {
 		return true
 	}
 	lines := strings.Split(out.String(), "\n")
+	ret := false
 	for _, v := range lines {
-		if strings.HasPrefix("??", v) {
+		if strings.TrimSpace(v) == "" {
 			continue
 		}
-		return true
+		if strings.HasPrefix(strings.TrimSpace(v), "??") {
+			continue
+		}
+		if verbose {
+			toolbox.PrintError("Uncommitted changes: %s", strings.TrimSpace(v))
+			ret = true
+		}
 	}
-	return false
+	return ret
 }
 
 // GetCurrentHash returns the current hash for HEAD by digging through
