@@ -125,8 +125,6 @@ func Build(tagVersion, commitNewRelease bool, overrideName, overrideEmail string
 	if tagVersion {
 		if err := gitutil.TagVersion(
 			ctx.Config.SourceRoot,
-			ctx.Config.CommitterName,
-			ctx.Config.CommitterEmail,
 			fmt.Sprintf("v%s", ctx.Version),
 			fmt.Sprintf("Release v%s (%s)", ctx.Version, ctx.Name)); err != nil {
 			return err
@@ -146,8 +144,6 @@ func Build(tagVersion, commitNewRelease bool, overrideName, overrideEmail string
 		}
 		hash, err := gitutil.CreateCommit(
 			ctx.Config.SourceRoot,
-			ctx.Config.CommitterName,
-			ctx.Config.CommitterEmail,
 			commitMessage,
 			filesToCommit...)
 		if err != nil {

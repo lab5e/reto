@@ -1,41 +1,31 @@
 package gitutil
 
 import (
-	"errors"
-	"time"
+	"bytes"
+	"os/exec"
+	"strings"
 
 	"github.com/ExploratoryEngineering/reto/pkg/toolbox"
-
-	"gopkg.in/src-d/go-git.v4"
-	"gopkg.in/src-d/go-git.v4/plumbing/object"
 )
 
 // HasChanges returns true if there's uncomitted or unstaged changes on the
 // current branch.
+// Using the regular git command here since the Worktree() and Status() methods
+// are *really* slow on even medium-sized repositories.
 func HasChanges(rootDir string) bool {
-	src, err := git.PlainOpen(rootDir)
+	cmd := exec.Command("git", "-C", rootDir, "status", "--porcelain")
+	var out bytes.Buffer
+	cmd.Stdout = &out
+	err := cmd.Run()
 	if err != nil {
-		toolbox.PrintError("Could not open Git repo at %s: %v", rootDir, err)
+		toolbox.PrintError("Could not read Git repo at %s: %v", rootDir, err)
 		return true
 	}
-	tree, err := src.Worktree()
-	if err != nil {
-		toolbox.PrintError("Could not read the working tree for %s: %v", rootDir, err)
-		return true
-	}
-	status, err := tree.Status()
-	if err != nil {
-		toolbox.PrintError("Could not read status for the working tree at %s: %v", rootDir, err)
-		return true
-	}
-	// The returned values is a map of changes. If map length is 0 there is no
-	// staged, unstaged or uncommited files.
-	for _, v := range status {
-		if v.Staging == git.Untracked {
-			// Untracked files are OK
+	lines := strings.Split(out.String(), "\n")
+	for _, v := range lines {
+		if strings.HasPrefix("??", v) {
 			continue
 		}
-		// Any other: Not OK
 		return true
 	}
 	return false
@@ -45,81 +35,34 @@ func HasChanges(rootDir string) bool {
 // the .git directory. The hash is stored somewhere in .git/refs/heads and
 // the file .git/HEAD points to the current branch
 func GetCurrentHash(rootDir string) (string, error) {
-	src, err := git.PlainOpen(rootDir)
+	cmd := exec.Command("git", "-C", rootDir, "rev-parse", "HEAD")
+	var out bytes.Buffer
+	cmd.Stdout = &out
+	err := cmd.Run()
 	if err != nil {
-		toolbox.PrintError("Could not open Git repo at %s: %v", rootDir, err)
+		toolbox.PrintError("Could not read Git repo at %s: %v", rootDir, err)
 		return "", err
 	}
-	ref, err := src.Head()
-	if err != nil {
-		toolbox.PrintError("Could not read the HEAD of %s: %v", rootDir, err)
-		return "", err
-	}
-	if ref.Hash().IsZero() {
-		toolbox.PrintError("Could not find the hash for the latest commit at %s", rootDir)
-		return "", errors.New("no hash")
-	}
-	return ref.Hash().String(), nil
+	return out.String(), nil
 }
 
 // TagVersion creates a version tag in Git
-func TagVersion(rootDir, name, email, tagName, message string) error {
-	src, err := git.PlainOpen(rootDir)
-	if err != nil {
-		toolbox.PrintError("Could not open Git repo at %s: %v", rootDir, err)
-		return err
-	}
-
-	ref, err := src.Head()
-	if err != nil {
-		toolbox.PrintError("Could not read the HEAD of %s: %v", rootDir, err)
-		return err
-	}
-	_, err = src.CreateTag(tagName, ref.Hash(), &git.CreateTagOptions{
-		Tagger: &object.Signature{
-			Name:  name,
-			Email: email,
-			When:  time.Now(),
-		},
-		Message: message,
-	})
-	if err != nil {
-		toolbox.PrintError("Could not create a tag in %s: %v", rootDir, err)
-		return err
-	}
-	return nil
+func TagVersion(rootDir, tagName, message string) error {
+	cmd := exec.Command("git", "-C", rootDir, "tag", tagName, "-m", message)
+	return cmd.Run()
 }
 
 // CreateCommit creates a new commit.
-func CreateCommit(rootDir, name, email, message string, files ...string) (string, error) {
-	src, err := git.PlainOpen(rootDir)
-	if err != nil {
-		toolbox.PrintError("Could not open Git repo at %s: %v", rootDir, err)
-		return "", err
-	}
-	tree, err := src.Worktree()
-	if err != nil {
-		toolbox.PrintError("Could not read the working tree for %s: %v", rootDir, err)
-		return "", err
-	}
+func CreateCommit(rootDir, message string, files ...string) (string, error) {
 	for _, v := range files {
-		_, err := tree.Add(v)
-		if err != nil {
-			toolbox.PrintError("Could not add %s to the working tree: %v", v, err)
+		cmd := exec.Command("git", "-C", rootDir, "add", v)
+		if err := cmd.Run(); err != nil {
 			return "", err
 		}
 	}
-	hash, err := tree.Commit(message, &git.CommitOptions{
-		Author: &object.Signature{
-			Name:  name,
-			Email: email,
-			When:  time.Now(),
-		},
-		Committer: nil,
-	})
+	err := exec.Command("git", "-C", rootDir, "commit", "-m", message).Run()
 	if err != nil {
-		toolbox.PrintError("Could not commit to the working tree: %v", err)
 		return "", err
 	}
-	return hash.String(), nil
+	return GetCurrentHash(rootDir)
 }
