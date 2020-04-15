@@ -14,7 +14,7 @@ import (
 )
 
 // Build builds a new release from the current setup
-func Build(tagVersion, commitNewRelease bool, overrideName, overrideEmail string) error {
+func Build(tagVersion, commitNewRelease bool) error {
 	fi, err := os.Stat(archiveDir)
 	if err != nil {
 		if err := os.Mkdir(archiveDir, toolbox.DefaultDirPerm); err != nil {
@@ -41,13 +41,6 @@ func Build(tagVersion, commitNewRelease bool, overrideName, overrideEmail string
 
 	if err := TemplatesComplete(ctx, true); err != nil {
 		return err
-	}
-
-	if overrideName != "" {
-		ctx.Config.CommitterName = overrideName
-	}
-	if overrideEmail != "" {
-		ctx.Config.CommitterEmail = overrideEmail
 	}
 
 	if err := VerifyConfig(ctx.Config, true); err != nil {
