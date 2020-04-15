@@ -2,6 +2,8 @@ package gitutil
 
 import (
 	"bytes"
+	"fmt"
+	"io/ioutil"
 	"os/exec"
 	"strings"
 
@@ -51,6 +53,22 @@ func GetCurrentHash(rootDir string) (string, error) {
 		return "", err
 	}
 	return out.String(), nil
+}
+
+// GetHash returns the hash for the given version. The hash is found by
+// reading .git/refs/tags/<version>. If the file isn't found it will return
+// an error
+func GetHash(rootDir, version string) (string, error) {
+	tagFile := fmt.Sprintf(".git/refs/tags/v%s", version)
+	if rootDir != "" {
+		tagFile = fmt.Sprintf("%s/%s", rootDir, tagFile)
+	}
+	buf, err := ioutil.ReadFile(tagFile)
+	if err != nil {
+		toolbox.PrintError("Could not find a version named %s in %s", version, rootDir)
+		return "", err
+	}
+	return strings.TrimSpace(string(buf)), nil
 }
 
 // TagVersion creates a version tag in Git
