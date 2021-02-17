@@ -21,12 +21,13 @@ func CheckForTODO(file string, printErrors bool) error {
 	for i, v := range lines {
 		if strings.Index(v, "TODO") > 0 {
 			if printErrors {
-				fmt.Printf("%s%s%s: TODO statement on line %s%d%s", Cyan, file, Reset, Cyan, i+1, Reset)
+				fmt.Printf("%s%s%s: TODO statement on line %s%d%s\n", Cyan, file, Reset, Cyan, i+1, Reset)
 			}
 			todos++
 		}
 	}
 	if todos > 0 {
+		fmt.Printf("%sThere's still TODOs in the %s file%s\n", Red, file, Reset)
 		return errors.New("not completed")
 	}
 	return nil
