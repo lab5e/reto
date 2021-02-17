@@ -9,14 +9,6 @@ import (
 )
 
 func main() {
-	/*defer func() {
-		// The Kong parser panics when there's a sole dash in the argument list
-		// I'm not sure if this is a bug or a feature :)
-		if r := recover(); r != nil {
-			fmt.Println("Error parsing command line: ", r)
-		}
-	}()*/
-
 	var param commands.Root
 	ctx := kong.Parse(&param,
 		kong.Name("reto"),
