@@ -15,15 +15,12 @@ import (
 // Using the regular git command here since the Worktree() and Status() methods
 // are *really* slow on even medium-sized repositories.
 func HasChanges(rootDir string, verbose bool) bool {
-	cmd := exec.Command("git", "-C", rootDir, "status", "--porcelain")
-	var out bytes.Buffer
-	cmd.Stdout = &out
-	err := cmd.Run()
+	out, err := exec.Command("git", "-C", rootDir, "status", "--porcelain").Output()
 	if err != nil {
 		fmt.Printf("%sCould not read Git repo at %s%s: %v\n", toolbox.Red, rootDir, toolbox.Reset, err)
 		return true
 	}
-	lines := strings.Split(out.String(), "\n")
+	lines := strings.Split(string(out), "\n")
 	ret := false
 	for _, v := range lines {
 		if strings.TrimSpace(v) == "" {

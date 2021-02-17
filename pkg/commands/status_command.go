@@ -34,20 +34,20 @@ func (c *statusCommand) Run(rc RunContext) error {
 	fmt.Println("Checking old releases")
 	changedFiles := release.NewFileVersions(ctx.Config, rc.ReleaseCommands().Status.Verbose)
 	fmt.Println("Checking SCM")
-	gitChanges := !gitutil.HasChanges(ctx.Config.SourceRoot, rc.ReleaseCommands().Status.Verbose)
+	gitChanges := gitutil.HasChanges(ctx.Config.SourceRoot, rc.ReleaseCommands().Status.Verbose)
 
 	fmt.Println()
 	fmt.Printf("Configuration:       %s\n", okNotOK(configErr == nil))
 	fmt.Printf("Working templates:   %s\n", okNotOK(templateErr == nil))
 	fmt.Printf("Version number:      %s\n", okNotOK(!ctx.Released))
-	fmt.Printf("Uncommitted changes: %s\n", okNotOK(gitChanges))
+	fmt.Printf("Uncommitted changes: %s\n", okNotOK(!gitChanges))
 	fmt.Printf("Changed binaries:    %s\n", okNotOK(changedFiles))
 	fmt.Println()
 	fmt.Printf("Active version:      %s\n", ctx.Version)
 	fmt.Printf("Commit Hash:         %s\n", ctx.CommitHash)
 	fmt.Printf("Name:                %s\n", ctx.Name)
 
-	readyToRelease := configErr == nil && templateErr == nil && gitChanges && changedFiles
+	readyToRelease := configErr == nil && templateErr == nil && !gitChanges && changedFiles
 
 	if rc.ReleaseCommands().Status.Verbose {
 		fmt.Println()
