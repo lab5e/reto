@@ -1,4 +1,4 @@
-module github.com/ExploratoryEngineering/reto
+module github.com/lab5e/reto
 
 go 1.16
 
