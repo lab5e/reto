@@ -1,17 +1,9 @@
 ## Changelog {{ .Version }}: {{ .Name }}
 
-### Features
+### Bug fixes
 
-[TODO: Write new features]
-
-### API
-
-[TODO: Changes to the API]
+Print error message if git tag + checkin fails
 
 ### Command line
 
-[TODO: Command line changes]
-
-### Other
-
-[TODO: Write other changes here]
+`--version` parameter for hashname to look up a version from a name.
