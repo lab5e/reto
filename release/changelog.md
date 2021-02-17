@@ -2,16 +2,5 @@
 
 ### Features
 
-[TODO: Write new features]
-
-### API
-
-[TODO: Changes to the API]
-
-### Command line
-
-[TODO: Command line changes]
-
-### Other
-
-[TODO: Write other changes here]
+* Use stdout for all error messages
+* Colour-coded output for the most common messages (needs ANSI term)
