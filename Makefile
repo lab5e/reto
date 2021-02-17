@@ -8,10 +8,10 @@ commit := $(shell bin/reto hash)
 name := $(shell bin/reto hashname)
 build_time := $(shell date +"%Y-%m-%dT%H:%M")
 
-ldflags := -X github.com/ExploratoryEngineering/reto/pkg/version.Number=$(version) \
-	-X github.com/ExploratoryEngineering/reto/pkg/version.Name=$(name) \
-	-X github.com/ExploratoryEngineering/reto/pkg/version.CommitHash=$(commit) \
-	-X github.com/ExploratoryEngineering/reto/pkg/version.BuildTime=$(build_time)
+ldflags := -X github.com/lab5e/reto/pkg/version.Number=$(version) \
+	-X github.com/lab5e/reto/pkg/version.Name=$(name) \
+	-X github.com/lab5e/reto/pkg/version.CommitHash=$(commit) \
+	-X github.com/lab5e/reto/pkg/version.BuildTime=$(build_time)
 
 local-rel:
 	cd cmd/reto && go build -ldflags "$(ldflags)" -o ../../bin/reto

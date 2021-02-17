@@ -10,7 +10,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/ExploratoryEngineering/reto/pkg/toolbox"
+	"github.com/lab5e/reto/pkg/toolbox"
 )
 
 func checksumFileName(name, version string) string {

@@ -1,7 +1,7 @@
 package commands
 
 import (
-	"github.com/ExploratoryEngineering/reto/pkg/release"
+	"github.com/lab5e/reto/pkg/release"
 )
 
 type verifyCommand struct {

@@ -7,7 +7,7 @@ import (
 	"os/exec"
 	"strings"
 
-	"github.com/ExploratoryEngineering/reto/pkg/toolbox"
+	"github.com/lab5e/reto/pkg/toolbox"
 )
 
 // HasChanges returns true if there's uncomitted or unstaged changes on the

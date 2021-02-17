@@ -8,7 +8,7 @@ import (
 	"os"
 	"sort"
 
-	"github.com/ExploratoryEngineering/reto/pkg/toolbox"
+	"github.com/lab5e/reto/pkg/toolbox"
 )
 
 // sampleChangelog is the default template for the changelog

@@ -9,8 +9,8 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/ExploratoryEngineering/reto/pkg/gitutil"
-	"github.com/ExploratoryEngineering/reto/pkg/toolbox"
+	"github.com/lab5e/reto/pkg/gitutil"
+	"github.com/lab5e/reto/pkg/toolbox"
 )
 
 // Build builds a new release from the current setup

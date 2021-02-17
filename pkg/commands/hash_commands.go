@@ -6,10 +6,10 @@ import (
 	"io/ioutil"
 	"strings"
 
-	"github.com/ExploratoryEngineering/reto/pkg/gitutil"
-	"github.com/ExploratoryEngineering/reto/pkg/hashname"
-	"github.com/ExploratoryEngineering/reto/pkg/release"
-	"github.com/ExploratoryEngineering/reto/pkg/toolbox"
+	"github.com/lab5e/reto/pkg/gitutil"
+	"github.com/lab5e/reto/pkg/hashname"
+	"github.com/lab5e/reto/pkg/release"
+	"github.com/lab5e/reto/pkg/toolbox"
 )
 
 type hashCommand struct {

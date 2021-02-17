@@ -3,8 +3,8 @@ package commands
 import (
 	"fmt"
 
-	"github.com/ExploratoryEngineering/reto/pkg/version"
 	"github.com/alecthomas/kong"
+	"github.com/lab5e/reto/pkg/version"
 )
 
 type versionFlag string

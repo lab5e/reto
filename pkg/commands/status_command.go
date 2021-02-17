@@ -4,8 +4,8 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/ExploratoryEngineering/reto/pkg/gitutil"
-	"github.com/ExploratoryEngineering/reto/pkg/release"
+	"github.com/lab5e/reto/pkg/gitutil"
+	"github.com/lab5e/reto/pkg/release"
 )
 
 type statusCommand struct {

@@ -3,7 +3,7 @@ package commands
 import (
 	"fmt"
 
-	"github.com/ExploratoryEngineering/reto/pkg/release"
+	"github.com/lab5e/reto/pkg/release"
 )
 
 type initCommand struct {

@@ -2,7 +2,7 @@
 
 ## Installing
 
-Install by running `go get -u github.com/ExploratoryEngineering/reto/cmd/reto` or
+Install by running `go get -u github.com/lab5e/reto/cmd/reto` or
 download the binaries from the release page.
 
 ## About
@@ -152,7 +152,7 @@ at the tool itself the file `pkg/version/version.go` contains the variables
 If you build the executable with the `ldflags` parameter set like this:
 
 ```shell
-go build -ldflags "-X github.com/ExploratoryEngineering/reto/pkg/version.Number=1.0.0 -X github.com/ExploratoryEngineering/reto/pkg/version.Name=psychological-karson -X github.com/ExploratoryEngineering/reto/pkg/version.CommitHash=e02bc6cd8ab3edd3d6e8874d1e97c08ef6c5db49 -X github.com/ExploratoryEngineering/reto/pkg/version.BuildTime=2020-02-01T22:35"
+go build -ldflags "-X github.com/lab5e/reto/pkg/version.Number=1.0.0 -X github.com/lab5e/reto/pkg/version.Name=psychological-karson -X github.com/lab5e/reto/pkg/version.CommitHash=e02bc6cd8ab3edd3d6e8874d1e97c08ef6c5db49 -X github.com/lab5e/reto/pkg/version.BuildTime=2020-02-01T22:35"
 ```
 
 The variables will be set to `1.0.0`, `psychological-karson`,

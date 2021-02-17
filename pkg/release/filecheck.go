@@ -8,7 +8,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/ExploratoryEngineering/reto/pkg/toolbox"
+	"github.com/lab5e/reto/pkg/toolbox"
 )
 
 // NewFileVersions checks that the binaries/artifacts are changed since last

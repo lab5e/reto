@@ -3,9 +3,9 @@ package main
 import (
 	"os"
 
-	"github.com/ExploratoryEngineering/reto/pkg/commands"
-	"github.com/ExploratoryEngineering/reto/pkg/toolbox"
 	"github.com/alecthomas/kong"
+	"github.com/lab5e/reto/pkg/commands"
+	"github.com/lab5e/reto/pkg/toolbox"
 )
 
 func main() {
