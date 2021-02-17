@@ -15,6 +15,7 @@ func (c *releaseCommand) Run(rc RunContext) error {
 	if err := release.Build(
 		rc.ReleaseCommands().Release.CreateTag,
 		rc.ReleaseCommands().Release.Commit); err != nil {
+		fmt.Printf("Error: Could not update git: %v", err)
 		return err
 	}
 	fmt.Print("Release built. ")
