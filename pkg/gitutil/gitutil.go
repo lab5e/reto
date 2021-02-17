@@ -20,7 +20,7 @@ func HasChanges(rootDir string, verbose bool) bool {
 	cmd.Stdout = &out
 	err := cmd.Run()
 	if err != nil {
-		toolbox.PrintError("Could not read Git repo at %s: %v", rootDir, err)
+		fmt.Printf("%sCould not read Git repo at %s%s: %v\n", toolbox.Red, rootDir, toolbox.Reset, err)
 		return true
 	}
 	lines := strings.Split(out.String(), "\n")
@@ -33,7 +33,7 @@ func HasChanges(rootDir string, verbose bool) bool {
 			continue
 		}
 		if verbose {
-			toolbox.PrintError("Uncommitted changes: %s", strings.TrimSpace(v))
+			fmt.Printf("%sUncommitted changes%s: %s\n", toolbox.Red, toolbox.Reset, strings.TrimSpace(v))
 			ret = true
 		}
 	}
@@ -49,7 +49,7 @@ func GetCurrentHash(rootDir string) (string, error) {
 	cmd.Stdout = &out
 	err := cmd.Run()
 	if err != nil {
-		toolbox.PrintError("Could not read Git repo at %s: %v", rootDir, err)
+		fmt.Printf("%sCould not read Git repo at %s%s: %v\n", toolbox.Red, rootDir, toolbox.Reset, err)
 		return "", err
 	}
 	return out.String(), nil
@@ -65,7 +65,8 @@ func GetHash(rootDir, version string) (string, error) {
 	}
 	buf, err := ioutil.ReadFile(tagFile)
 	if err != nil {
-		toolbox.PrintError("Could not find a version named %s in %s", version, rootDir)
+		fmt.Printf("%sCould not find a version named%s %s%s%s in %s%s%s\n",
+			toolbox.Red, toolbox.Reset, toolbox.Cyan, version, toolbox.Reset, toolbox.Cyan, rootDir, toolbox.Reset)
 		return "", err
 	}
 	return strings.TrimSpace(string(buf)), nil

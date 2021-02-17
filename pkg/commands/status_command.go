@@ -6,6 +6,7 @@ import (
 
 	"github.com/lab5e/reto/pkg/gitutil"
 	"github.com/lab5e/reto/pkg/release"
+	"github.com/lab5e/reto/pkg/toolbox"
 )
 
 type statusCommand struct {
@@ -15,9 +16,9 @@ type statusCommand struct {
 
 func okNotOK(v bool) string {
 	if v {
-		return "OK"
+		return toolbox.Green + "OK" + toolbox.Reset
 	}
-	return "NOT OK"
+	return toolbox.Red + "NOT OK" + toolbox.Reset
 }
 
 func (c *statusCommand) Run(rc RunContext) error {
@@ -64,7 +65,7 @@ func (c *statusCommand) Run(rc RunContext) error {
 
 	if readyToRelease {
 		fmt.Println()
-		fmt.Println("Ready to release.")
+		fmt.Println(toolbox.Cyan, "Ready to release.", toolbox.Reset)
 		return nil
 	}
 

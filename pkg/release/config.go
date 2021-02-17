@@ -27,8 +27,8 @@ const (
 	ConcatenateAction = "concatenate"
 )
 
-// Templates are template files that are included in the release archive. They
-// are Go templates
+// Template is the template file that are included in the release archive. They
+// are regular Go templates
 type Template struct {
 	Name           string `json:"name"`
 	TemplateAction string `json:"action"`
@@ -50,7 +50,7 @@ const ConfigPath = "release/config.json"
 func writeSampleConfig() error {
 	_, err := os.Stat(ConfigPath)
 	if !os.IsNotExist(err) {
-		toolbox.PrintError("Configuration file already exists")
+		fmt.Printf("Configuration file already exists\n")
 		return err
 	}
 
@@ -61,7 +61,7 @@ func writeSampleConfig() error {
 	}
 
 	if err := ioutil.WriteFile(ConfigPath, buf, toolbox.DefaultFilePerm); err != nil {
-		toolbox.PrintError("Could not write sample config: %v", err)
+		fmt.Printf("Could not write sample config: %v\n", err)
 		return err
 	}
 	return nil
@@ -90,12 +90,12 @@ func defaultConfig() Config {
 func readConfig() (Config, error) {
 	buf, err := ioutil.ReadFile(ConfigPath)
 	if err != nil {
-		toolbox.PrintError("Could not read configuration: %v", err)
+		fmt.Printf("Could not read configuration: %v\n", err)
 		return Config{}, err
 	}
 	ret := Config{}
 	if err := json.Unmarshal(buf, &ret); err != nil {
-		toolbox.PrintError("Configuration file format error: %v", err)
+		fmt.Printf("Configuration file format error: %v\n", err)
 		return Config{}, err
 	}
 	return ret, nil
@@ -110,13 +110,13 @@ func VerifyConfig(config Config, printErrors bool) error {
 	}
 	if len(config.Targets) == 0 {
 		if printErrors {
-			toolbox.PrintError("There are no targets in the configuration file")
+			fmt.Printf("There are no targets in the configuration file\n")
 		}
 		return errors.New("no targets")
 	}
 	if len(config.Files) == 0 {
 		if printErrors {
-			toolbox.PrintError("There are no output files in the configuration file")
+			fmt.Printf("There are no output files in the configuration file\n")
 		}
 		return errors.New("no targets")
 	}
@@ -150,7 +150,7 @@ func VerifyConfig(config Config, printErrors bool) error {
 			_, ok := targets[target]
 			if !ok {
 				if printErrors {
-					toolbox.PrintError("File with ID '%s' have unknown target %s", id, target)
+					fmt.Printf("File with ID '%s' have unknown target %s\n", id, target)
 				}
 				errs++
 			}
@@ -159,7 +159,7 @@ func VerifyConfig(config Config, printErrors bool) error {
 		if len(targets) > 0 {
 			for target := range targets {
 				if printErrors {
-					toolbox.PrintError("File with ID '%s' is missing target %s", id, target)
+					fmt.Printf("File with ID '%s' is missing target %s\n", id, target)
 				}
 				errs++
 			}
@@ -173,11 +173,11 @@ func VerifyConfig(config Config, printErrors bool) error {
 		if _, err := os.Stat(file.Name); err != nil {
 			if os.IsNotExist(err) {
 				if printErrors {
-					toolbox.PrintError("The file %s does not exist", file.Name)
+					fmt.Printf("The file %s does not exist\n", file.Name)
 				}
 				return err
 			}
-			toolbox.PrintError("Could not access %s: %v", file.Name, err)
+			fmt.Printf("Could not access %s: %v\n", file.Name, err)
 			return err
 		}
 	}
@@ -185,15 +185,15 @@ func VerifyConfig(config Config, printErrors bool) error {
 	errs = 0
 	for _, template := range config.Templates {
 		if template.Name == "" {
-			toolbox.PrintError("Found template with no name in configuration")
+			fmt.Printf("Found template with no name in configuration\n")
 			errs++
 		}
 		if !toolbox.IsFile(fmt.Sprintf("%s/%s", templateDir, template.Name)) {
-			toolbox.PrintError("Template %s does not exist", template.Name)
+			fmt.Printf("Template %s does not exist\n", template.Name)
 			errs++
 		}
 		if template.TemplateAction != IncludeAction && template.TemplateAction != ConcatenateAction {
-			toolbox.PrintError("Unknown action for template %s: %s", template.Name, template.TemplateAction)
+			fmt.Printf("Unknown action for template %s: %s\n", template.Name, template.TemplateAction)
 			errs++
 		}
 	}

@@ -1,11 +1,11 @@
 package main
 
 import (
+	"fmt"
 	"os"
 
 	"github.com/alecthomas/kong"
 	"github.com/lab5e/reto/pkg/commands"
-	"github.com/lab5e/reto/pkg/toolbox"
 )
 
 func main() {
@@ -22,7 +22,7 @@ func main() {
 
 	if param.Root != "" {
 		if err := os.Chdir(param.Root); err != nil {
-			toolbox.PrintError("Couldn't change directory to %s", param.Root)
+			fmt.Printf("Couldn't change directory to %s\n", param.Root)
 			os.Exit(1)
 		}
 	}

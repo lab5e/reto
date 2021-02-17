@@ -32,7 +32,7 @@ func (c *hashCommand) Run(rc RunContext) error {
 
 	hash, err := gitutil.GetHash(ctx.Config.SourceRoot, c.Version)
 	if err != nil {
-		toolbox.PrintError(err.Error())
+		fmt.Printf("%s%v%s\n", toolbox.Red, err, toolbox.Reset)
 		return err
 	}
 	fmt.Println(hash)
@@ -51,7 +51,7 @@ func (c *hashNameCommand) Run(rc RunContext) error {
 
 	hash, err := gitutil.GetHash(ctx.Config.SourceRoot, c.Version)
 	if err != nil {
-		toolbox.PrintError(err.Error())
+		fmt.Println("%s%v%s\n", toolbox.Red, err, toolbox.Reset)
 		return err
 	}
 	fmt.Println(hashname.HashToName(hash))
@@ -65,7 +65,7 @@ type nameHashCommand struct {
 func (c *nameHashCommand) Run(rc RunContext) error {
 	hash, err := hashname.NameToHash(rc.ReleaseCommands().Namehash.Name)
 	if err != nil {
-		toolbox.PrintError("Unable to convert name into hash: %v", err)
+		fmt.Printf("%sUnable to convert name into hash%s: %v\n", toolbox.Red, toolbox.Reset, err)
 		return err
 	}
 	fmt.Println(hash)
@@ -79,7 +79,7 @@ type nameVersionCommand struct {
 func (c *nameVersionCommand) Run(rc RunContext) error {
 	hash, err := hashname.NameToHash(rc.ReleaseCommands().Nameversion.Name)
 	if err != nil {
-		toolbox.PrintError("Unable to convert name into hash: %v", err)
+		fmt.Printf("%sUnable to convert name into hash%s: %v\n", toolbox.Red, toolbox.Reset, err)
 		return err
 	}
 
@@ -94,7 +94,7 @@ func (c *nameVersionCommand) Run(rc RunContext) error {
 	}
 	infos, err := ioutil.ReadDir(tagDir)
 	if err != nil {
-		toolbox.PrintError("Could not read tag directory in %s", ctx.Config.SourceRoot)
+		fmt.Printf("%sCould not read tag directory in %s%s\n", toolbox.Red, ctx.Config.SourceRoot, toolbox.Reset)
 		return err
 	}
 
@@ -104,7 +104,7 @@ func (c *nameVersionCommand) Run(rc RunContext) error {
 		}
 		buf, err := ioutil.ReadFile(fmt.Sprintf("%s/%s", tagDir, fi.Name()))
 		if err != nil {
-			toolbox.PrintError("Could not read hash for tag %s: %v", fi.Name(), err)
+			fmt.Printf("%sCould not read hash for tag %s%s: %v\n", toolbox.Red, fi.Name(), toolbox.Reset, err)
 			return err
 		}
 		if strings.HasPrefix(string(buf), hash) {

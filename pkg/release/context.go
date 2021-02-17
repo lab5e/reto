@@ -10,7 +10,6 @@ import (
 
 	"github.com/lab5e/reto/pkg/gitutil"
 	"github.com/lab5e/reto/pkg/hashname"
-	"github.com/lab5e/reto/pkg/toolbox"
 )
 
 // VersionFile is the path to the fil containing the version
@@ -31,17 +30,17 @@ type Context struct {
 // GetContext verifies that the release tool is initialized
 func GetContext() (*Context, error) {
 	if _, err := os.Stat(VersionFile); err != nil {
-		toolbox.PrintError("Can't read the version file: %v", err)
+		fmt.Printf("Can't read the version file: %v\n", err)
 		return nil, errors.New("no version file")
 	}
 	buf, err := ioutil.ReadFile(VersionFile)
 	if err != nil {
-		toolbox.PrintError("Unable to read version file: %v", err)
+		fmt.Printf("Unable to read version file: %v\n", err)
 		return nil, err
 	}
 	lines := strings.Split(string(buf), "\n")
 	if len(lines) == 0 {
-		toolbox.PrintError("Version file does not contain a version")
+		fmt.Printf("Version file does not contain a version\n")
 		return nil, errors.New("no version found")
 	}
 	ret := Context{
@@ -51,26 +50,26 @@ func GetContext() (*Context, error) {
 	var versionErr = errors.New("invalid version content")
 	tuples := strings.Split(ret.Version, ".")
 	if len(tuples) != 3 {
-		toolbox.PrintError("Version string is malformed: %s", ret.Version)
+		fmt.Printf("Version string is malformed: %s\n", ret.Version)
 		return nil, versionErr
 	}
 	v, err := strconv.ParseInt(tuples[0], 10, 63)
 	if err != nil {
-		toolbox.PrintError("Major version is not an integer: %s", ret.Version)
+		fmt.Printf("Major version is not an integer: %s\n", ret.Version)
 		return nil, versionErr
 	}
 	ret.Major = int(v)
 
 	v, err = strconv.ParseInt(tuples[1], 10, 63)
 	if err != nil {
-		toolbox.PrintError("Minor version is not an integer: %s", ret.Version)
+		fmt.Printf("Minor version is not an integer: %s\n", ret.Version)
 		return nil, versionErr
 	}
 	ret.Minor = int(v)
 
 	v, err = strconv.ParseInt(tuples[2], 10, 63)
 	if err != nil {
-		toolbox.PrintError("Patch version is not an integer: %s", ret.Version)
+		fmt.Printf("Patch version is not an integer: %s\n", ret.Version)
 		return nil, versionErr
 	}
 	ret.Patch = int(v)
@@ -81,7 +80,7 @@ func GetContext() (*Context, error) {
 		ret.Released = false
 	}
 	if err != nil && !os.IsNotExist(err) {
-		toolbox.PrintError("Could not read release directory: %v", err)
+		fmt.Printf("Could not read release directory: %v\n", err)
 		return nil, err
 	}
 

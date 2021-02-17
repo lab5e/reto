@@ -53,14 +53,14 @@ func TemplatesComplete(ctx *Context, printErrors bool) error {
 func initTemplates() error {
 	templateFile := fmt.Sprintf("%s/changelog.md", templateDir)
 	if err := ioutil.WriteFile(templateFile, []byte(sampleChangelog), toolbox.DefaultFilePerm); err != nil {
-		toolbox.PrintError("Could not create sample file %s", templateFile)
+		fmt.Printf("Could not create sample file %s\n", templateFile)
 	}
 
 	for _, template := range defaultConfig().Templates {
 		templateFile := fmt.Sprintf("%s/%s", templateDir, template.Name)
 		workingCopy := fmt.Sprintf("release/%s", template.Name)
 		if err := toolbox.CopyFile(templateFile, workingCopy); err != nil {
-			toolbox.PrintError("Could not copy %s to release directory: %v", workingCopy, err)
+			fmt.Printf("Could not copy %s to release directory: %v\n", workingCopy, err)
 			return err
 		}
 	}
@@ -71,25 +71,25 @@ func initTemplates() error {
 func mergeTemplate(source string, dest string, ctx *Context) error {
 	buf, err := ioutil.ReadFile(source)
 	if err != nil {
-		toolbox.PrintError("Could not open working copy of template: %v", err)
+		fmt.Printf("Could not open working copy of template: %v\n", err)
 		return err
 	}
 
 	t, err := template.New(source).Parse(string(buf))
 	if err != nil {
-		toolbox.PrintError("Could not parse working copy of template: %v", err)
+		fmt.Printf("Could not parse working copy of template: %v\n", err)
 		return err
 	}
 
 	f, err := os.Create(dest)
 	if err != nil {
-		toolbox.PrintError("Could not create template at %s: %v", dest, err)
+		fmt.Printf("Could not create template at %s: %v\n", dest, err)
 		return err
 	}
 	defer f.Close()
 
 	if err := t.Execute(f, ctx); err != nil {
-		toolbox.PrintError("Could not merge template: %v", err)
+		fmt.Printf("Could not merge template: %v\n", err)
 		return err
 	}
 	return nil
@@ -101,7 +101,7 @@ func concatenateTemplate(basename string, destination string) error {
 
 	fileinfos, err := ioutil.ReadDir(releaseDir)
 	if err != nil {
-		toolbox.PrintError("Could not read release directory: %v", err)
+		fmt.Printf("Could not read release directory: %v\n", err)
 		return err
 	}
 
@@ -117,14 +117,14 @@ func concatenateTemplate(basename string, destination string) error {
 	for i := len(inputs) - 1; i >= 0; i-- {
 		buf, err := ioutil.ReadFile(inputs[i])
 		if err != nil {
-			toolbox.PrintError("Could not read changelog at %s: %v", inputs[i], err)
+			fmt.Printf("Could not read changelog at %s: %v\n", inputs[i], err)
 			return err
 		}
 		buffer = append(buffer, buf...)
 	}
 	fmt.Printf("%d files merged\n", len(inputs))
 	if err := ioutil.WriteFile(destination, buffer, toolbox.DefaultFilePerm); err != nil {
-		toolbox.PrintError("Error writing %s: %v", destination, err)
+		fmt.Printf("Error writing %s: %v\n", destination, err)
 		return err
 	}
 	return nil

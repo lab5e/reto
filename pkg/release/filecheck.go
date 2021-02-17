@@ -25,7 +25,7 @@ func NewFileVersions(config Config, printErrors bool) bool {
 
 		buf, err := ioutil.ReadFile(v.Name)
 		if err != nil {
-			toolbox.PrintError("Unable to read %s: %v", v.Name, err)
+			fmt.Printf("%sUnable to read %s%s: %v\n", toolbox.Red, v.Name, toolbox.Reset, err)
 			return false
 		}
 		sum := sha256.Sum256(buf)
@@ -38,7 +38,7 @@ func NewFileVersions(config Config, printErrors bool) bool {
 
 	fileinfos, err := ioutil.ReadDir(archiveDir)
 	if err != nil {
-		toolbox.PrintError("Could not read release directory: %v", err)
+		fmt.Printf("%sCould not read release directory%s: %v\n", toolbox.Red, toolbox.Reset, err)
 		return false
 	}
 
@@ -61,7 +61,7 @@ func NewFileVersions(config Config, printErrors bool) bool {
 
 	buf, err := ioutil.ReadFile(oldChecksumFile)
 	if err != nil {
-		toolbox.PrintError("Could not read previous checksum file %s: %v", oldChecksumFile, err)
+		fmt.Printf("%sCould not read previous checksum file %s%s: %v\n", toolbox.Red, oldChecksumFile, toolbox.Reset, err)
 		return false
 	}
 	lines := strings.Split(string(buf), "\n")
@@ -75,7 +75,7 @@ func NewFileVersions(config Config, printErrors bool) bool {
 		newChecksum := newChecksums[tuples[1]]
 		if newChecksum == tuples[0] {
 			if printErrors {
-				toolbox.PrintError("File %s has the same checksum as the previous version (%s) -- %s", tuples[1], oldVersion, tuples[0])
+				fmt.Printf("%sFile %s%s has the same checksum as the previous version (%s) -- %s", toolbox.Red, tuples[1], toolbox.Reset, oldVersion, tuples[0])
 			}
 			sameChecksum++
 		}

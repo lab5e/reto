@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/lab5e/reto/pkg/release"
+	"github.com/lab5e/reto/pkg/toolbox"
 )
 
 type releaseCommand struct {
@@ -15,12 +16,11 @@ func (c *releaseCommand) Run(rc RunContext) error {
 	if err := release.Build(
 		rc.ReleaseCommands().Release.CreateTag,
 		rc.ReleaseCommands().Release.Commit); err != nil {
-		fmt.Printf("Error: Could not update git: %v", err)
 		return err
 	}
 	fmt.Print("Release built. ")
 	if rc.ReleaseCommands().Release.CreateTag {
-		fmt.Print("Push tags with 'git push --tags'.")
+		fmt.Printf("%sPush tags with 'git push --tags'%s.", toolbox.Cyan, toolbox.Reset)
 	}
 	fmt.Println()
 	return nil

@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/lab5e/reto/pkg/release"
+	"github.com/lab5e/reto/pkg/toolbox"
 )
 
 type bumpCommand struct {
@@ -17,6 +18,6 @@ func (c *bumpCommand) Run(rc RunContext) error {
 	if err != nil {
 		return err
 	}
-	fmt.Printf("New version is now %s\n", ctx.Version)
+	fmt.Printf("New version is now %s%s%s\n", toolbox.Cyan, ctx.Version, toolbox.Reset)
 	return nil
 }

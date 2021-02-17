@@ -18,16 +18,16 @@ func Build(tagVersion, commitNewRelease bool) error {
 	fi, err := os.Stat(archiveDir)
 	if err != nil {
 		if err := os.Mkdir(archiveDir, toolbox.DefaultDirPerm); err != nil {
-			toolbox.PrintError("Could not create archive directory: %v", err)
+			fmt.Printf("%sCould not create archive directory:%s %v\n", toolbox.Red, toolbox.Reset, err)
 			return err
 		}
 	}
 	if err != nil {
-		toolbox.PrintError("Can't check status of archive dir: %v", err)
+		fmt.Printf("%sCan't check status of archive dir:%s %v\n", toolbox.Red, toolbox.Reset, err)
 		return err
 	}
 	if !fi.IsDir() {
-		toolbox.PrintError("%s is not a directory", archiveDir)
+		fmt.Printf("%s%s is not a directory%s\n", toolbox.Red, archiveDir, toolbox.Reset)
 		return errors.New("no archive")
 	}
 	ctx, err := GetContext()
@@ -35,7 +35,7 @@ func Build(tagVersion, commitNewRelease bool) error {
 		return err
 	}
 	if ctx.Released {
-		toolbox.PrintError("This version is already released. Bump the version and try again.")
+		fmt.Printf("%sThis version is already released.%s Bump the version and try again.\n", toolbox.Red, toolbox.Reset)
 		return errors.New("already released")
 	}
 
@@ -47,7 +47,7 @@ func Build(tagVersion, commitNewRelease bool) error {
 		return err
 	}
 	if gitutil.HasChanges(ctx.Config.SourceRoot, true) {
-		toolbox.PrintError("There are uncommitted or unstaged changes in the current Git branch")
+		fmt.Printf("%sThere are uncommitted or unstaged changes in the current Git branch%s\n", toolbox.Red, toolbox.Reset)
 		return errors.New("uncommitted changes")
 	}
 
@@ -56,13 +56,13 @@ func Build(tagVersion, commitNewRelease bool) error {
 	}
 
 	if err := os.Mkdir(fmt.Sprintf("%s/%s", releaseDir, ctx.Version), toolbox.DefaultDirPerm); err != nil {
-		toolbox.PrintError("Could not create release directory: %v", err)
+		fmt.Printf("%sCould not create release directory:%s %v\n", toolbox.Red, toolbox.Reset, err)
 		return err
 	}
 
 	archivePath := fmt.Sprintf("%s/%s", archiveDir, ctx.Version)
 	if err := os.Mkdir(archivePath, toolbox.DefaultDirPerm); err != nil {
-		toolbox.PrintError("Unable to create archive directory %s: %v", archivePath, err)
+		fmt.Printf("%sUnable to create archive directory %s%s: %v\n", toolbox.Red, archivePath, toolbox.Reset, err)
 		return err
 	}
 
@@ -76,11 +76,11 @@ func Build(tagVersion, commitNewRelease bool) error {
 			return err
 		}
 		if err := os.Remove(workingCopy); err != nil {
-			toolbox.PrintError("Could not remove template %s: %v", template, err)
+			fmt.Printf("%sCould not remove template %s%s: %v\n", toolbox.Red, template, toolbox.Reset, err)
 			return err
 		}
 		if err := toolbox.CopyFile(fmt.Sprintf("%s/%s", templateDir, template.Name), workingCopy); err != nil {
-			toolbox.PrintError("Could not copy %s to release directory: %v", workingCopy, err)
+			fmt.Printf("%sCould not copy %s to release directory%s: %v\n", toolbox.Red, workingCopy, toolbox.Reset, err)
 			return err
 		}
 		if template.TemplateAction == ConcatenateAction {
@@ -109,7 +109,7 @@ func Build(tagVersion, commitNewRelease bool) error {
 	// Remove the generate files in the archive folder
 	for _, v := range tempFiles {
 		if err := os.Remove(v); err != nil {
-			toolbox.PrintError("Could not remove temporary file at %s: %v", v, err)
+			fmt.Printf("%sCould not remove temporary file at %s%s: %v\n", toolbox.Red, v, toolbox.Reset, err)
 			return err
 		}
 	}
@@ -140,16 +140,16 @@ func Build(tagVersion, commitNewRelease bool) error {
 			commitMessage,
 			filesToCommit...)
 		if err != nil {
-			toolbox.PrintError("Could not commit the new release files: %v", err)
+			fmt.Printf("%sCould not commit the new release files%s: %v\n", toolbox.Red, toolbox.Reset, err)
 			return err
 		}
 		fmt.Printf("New change log is committed as %s\n", hash[:6])
 		newCtx, err := BumpVersion(false, false, true)
 		if err != nil {
-			toolbox.PrintError("Could not autobump version: %v", err)
+			fmt.Printf("%sCould not autobump version%s: %v\n", toolbox.Red, toolbox.Reset, err)
 			return nil
 		}
-		fmt.Printf("auto-bumped new version to %s\n", newCtx.Version)
+		fmt.Printf("auto-bumped new version to %s%s%s\n", toolbox.Cyan, newCtx.Version, toolbox.Reset)
 	}
 
 	return nil
@@ -159,7 +159,7 @@ func writeZipped(z *zip.Writer, header *zip.FileHeader, buf []byte) error {
 	header.Method = zip.Deflate
 	zf, err := z.CreateHeader(header)
 	if err != nil {
-		toolbox.PrintError("Could not create zip entry %s: %v", header.Name, err)
+		fmt.Printf("%sCould not create zip entry %s%s: %v\n", toolbox.Red, header.Name, toolbox.Reset, err)
 		return err
 	}
 	if _, err := zf.Write(buf); err != nil {
@@ -172,11 +172,11 @@ func writeZipped(z *zip.Writer, header *zip.FileHeader, buf []byte) error {
 func buildRelease(ctx *Context, target, archivePath string, tempFiles []string) error {
 	archive := fmt.Sprintf("%s/%s-%s_%s.zip", archivePath, ctx.Version, ctx.Config.Name, target)
 
-	fmt.Printf("Building release archive %s \n", archive)
+	fmt.Printf("Building release archive %s%s%s \n", toolbox.Cyan, archive, toolbox.Reset)
 
 	f, err := os.Create(archive)
 	if err != nil {
-		toolbox.PrintError("Unable to create archive file %s: %v", archive, err)
+		fmt.Printf("%sUnable to create archive file %s%s: %v\n", toolbox.Red, archive, toolbox.Reset, err)
 		return err
 	}
 	zipWriter := zip.NewWriter(f)
@@ -187,7 +187,7 @@ func buildRelease(ctx *Context, target, archivePath string, tempFiles []string) 
 	for _, tempFile := range tempFiles {
 		buf, err := ioutil.ReadFile(tempFile)
 		if err != nil {
-			toolbox.PrintError("Could not read temp file %s: %v", tempFile, err)
+			fmt.Printf("%sCould not read temp file %s%s: %v\n", toolbox.Red, tempFile, toolbox.Reset, err)
 			return err
 		}
 		fmt.Printf(" - [template] %s\n", filepath.Base(tempFile))
@@ -208,17 +208,17 @@ func buildRelease(ctx *Context, target, archivePath string, tempFiles []string) 
 			fmt.Printf(" - [%s] %s\n", v.ID, v.Name)
 			buf, err := ioutil.ReadFile(v.Name)
 			if err != nil {
-				toolbox.PrintError("Unable to read file %s: %v", v.Name, err)
+				fmt.Printf("%sUnable to read file %s%s: %v\n", toolbox.Red, v.Name, toolbox.Reset, err)
 				return err
 			}
 			fi, err := os.Stat(v.Name)
 			if err != nil {
-				toolbox.PrintError("Could not stat %s: %v", v.Name, err)
+				fmt.Printf("%sCould not stat %s%s: %v\n", toolbox.Red, v.Name, toolbox.Reset, err)
 				return err
 			}
 			header, err := zip.FileInfoHeader(fi)
 			if err != nil {
-				toolbox.PrintError("Could not create file info header for %s: %v", v.Name, err)
+				fmt.Printf("%sCould not create file info header for %s%s: %v\n", toolbox.Red, v.Name, toolbox.Reset, err)
 				return err
 			}
 			writeZipped(zipWriter, header, buf)
