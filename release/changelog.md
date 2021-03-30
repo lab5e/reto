@@ -1,6 +1,17 @@
 ## Changelog {{ .Version }}: {{ .Name }}
 
-### Bug fixes
+### Features
 
-Some adjectives had hyphens in them; ie they might produce names with spaces
-in them.
+[TODO: Write new features]
+
+### API
+
+[TODO: Changes to the API]
+
+### Command line
+
+[TODO: Command line changes]
+
+### Other
+
+[TODO: Write other changes here]
