@@ -1,6 +1,17 @@
 ## Changelog {{ .Version }}: {{ .Name }}
 
-### Fixes
+### Features
 
-* Fixed bug in git status check
-* Mute errors when checking for todos
+[TODO: Write new features]
+
+### API
+
+[TODO: Changes to the API]
+
+### Command line
+
+[TODO: Command line changes]
+
+### Other
+
+[TODO: Write other changes here]
