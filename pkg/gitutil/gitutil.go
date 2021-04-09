@@ -31,8 +31,8 @@ func HasChanges(rootDir string, verbose bool) bool {
 		}
 		if verbose {
 			fmt.Printf("%sUncommitted changes%s: %s\n", toolbox.Red, toolbox.Reset, strings.TrimSpace(v))
-			ret = true
 		}
+		ret = true
 	}
 	return ret
 }
