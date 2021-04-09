@@ -27,7 +27,9 @@ func CheckForTODO(file string, printErrors bool) error {
 		}
 	}
 	if todos > 0 {
-		fmt.Printf("%sThere's still TODOs in the %s file%s\n", Red, file, Reset)
+		if printErrors {
+			fmt.Printf("%sThere's still TODOs in the %s file%s\n", Red, file, Reset)
+		}
 		return errors.New("not completed")
 	}
 	return nil
