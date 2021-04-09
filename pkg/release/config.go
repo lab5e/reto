@@ -73,12 +73,12 @@ func defaultConfig() Config {
 		SourceRoot: ".",
 		Name:       "TODO set your product name",
 		Targets:    []string{"TODO: set target (amd64-darwin, arm-linux, mips-plan9...)"},
-		Templates: []Template{Template{
+		Templates: []Template{{
 			Name:           "changelog.md",
 			TemplateAction: ConcatenateAction,
 		}},
 		Files: []File{
-			File{
+			{
 				ID:     "TODO: set ID for file",
 				Name:   "TODO: Add your built files here",
 				Target: "TODO: Set target for file here, '-' if it doesn't apply",
