@@ -1,0 +1,9 @@
+The files in this archive has a SHA256 checksum. You can use the tool itself
+to verify the integrity of the files[1] or you can use
+
+    shasum -a 256 -c [checksum file]
+
+
+---
+[1] If you use the tool you just downloaded it makes no sense so for the
+    first time you should verify it via the command line.
