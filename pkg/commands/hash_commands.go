@@ -51,7 +51,7 @@ func (c *hashNameCommand) Run(rc RunContext) error {
 
 	hash, err := gitutil.GetHash(ctx.Config.SourceRoot, c.Version)
 	if err != nil {
-		fmt.Println("%s%v%s\n", toolbox.Red, err, toolbox.Reset)
+		fmt.Printf("%s%v%s\n", toolbox.Red, err, toolbox.Reset)
 		return err
 	}
 	fmt.Println(hashname.HashToName(hash))
