@@ -47,7 +47,7 @@ func (c *statusCommand) Run(rc RunContext) error {
 	fmt.Printf("Commit Hash:         %s\n", ctx.CommitHash)
 	fmt.Printf("Name:                %s\n", ctx.Name)
 
-	readyToRelease := configErr == nil && templateErr == nil && !gitChanges && changedFiles
+	readyToRelease := configErr == nil && templateErr == nil && !gitChanges && changedFiles && !ctx.Released
 
 	if rc.ReleaseCommands().Status.Verbose {
 		fmt.Println()
